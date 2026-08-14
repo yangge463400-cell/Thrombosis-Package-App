@@ -22,6 +22,8 @@
         <mybatis-plus.version>3.5.7</mybatis-plus.version>
         <mysql.version>9.1.0</mysql.version>
         <jjwt.version>0.12.6</jjwt.version>
+        <!-- 覆盖 Spring Boot 默认 Lombok 版本：JDK 23+ 需要 1.18.36+，JDK 25 需要 1.18.40+，此处用最新稳定版兼容 JDK 21~26 -->
+        <lombok.version>1.18.46</lombok.version>
     </properties>
 
     <dependencies>
@@ -100,6 +102,20 @@
 
     <build>
         <plugins>
+            <!-- 显式声明 Lombok 注解处理器（JDK 23+ 默认不自动运行注解处理器，必须显式配置） -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
