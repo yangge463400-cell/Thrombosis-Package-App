@@ -1,0 +1,16 @@
+.cd {
+  display: inline-flex;
+  align-items: center;
+  height: 88rpx;
+  padding: 0 16rpx;
+  box-sizing: border-box;
+}
+.cd-text {
+  font-size: 32rpx;
+  color: #999999;
+  white-space: nowrap;
+}
+.cd-active {
+  color: #1677FF;
+  font-weight: 600;
+}

@@ -1,0 +1,8 @@
+.pl-page { min-height: 100vh; background: #F5F7FA; }
+.pl-list { padding: 24rpx 32rpx 0; }
+.pl-loading {
+  text-align: center;
+  font-size: 28rpx;
+  color: #999999;
+  padding: 24rpx 0;
+}

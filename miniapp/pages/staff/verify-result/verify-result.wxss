@@ -1,0 +1,29 @@
+.vr-page { min-height: 100vh; background: #F5F7FA; }
+.vr-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 100rpx 0 40rpx;
+}
+.vr-icon {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80rpx;
+  color: #FFFFFF;
+}
+.vr-ok { background: #52C41A; box-shadow: 0 12rpx 32rpx rgba(82, 196, 26, 0.35); }
+.vr-fail { background: #FF4D4F; box-shadow: 0 12rpx 32rpx rgba(255, 77, 79, 0.35); }
+.vr-title { font-size: 48rpx; font-weight: bold; color: #333333; margin-top: 32rpx; }
+.vr-sub { font-size: 32rpx; color: #666666; margin-top: 12rpx; padding: 0 60rpx; text-align: center; }
+
+.vr-info { margin: 24rpx 32rpx 0; }
+.vr-row { display: flex; align-items: center; min-height: 96rpx; }
+.vr-label { font-size: 32rpx; color: #999999; width: 160rpx; }
+.vr-value { font-size: 36rpx; color: #333333; font-weight: 600; }
+.vr-actions { display: flex; gap: 24rpx; padding: 0 32rpx; }
+.vr-btn { width: calc(100% - 64rpx); margin-left: 32rpx; margin-right: 32rpx; }
+.vr-actions .vr-btn { margin: 0; flex: 1; width: auto; }

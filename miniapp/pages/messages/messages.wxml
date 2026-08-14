@@ -1,0 +1,18 @@
+<view class="ms-page">
+  <nav-bar title="消息中心"></nav-bar>
+
+  <!-- 分类 tab -->
+  <scroll-view scroll-x class="ms-tabs" show-scrollbar="{{false}}">
+    <view wx:for="{{tabs}}" wx:key="key"
+          class="ms-tab {{activeType === item.key ? 'ms-tab-active' : ''}}"
+          bindtap="switchTab" data-key="{{item.key}}">{{item.text}}</view>
+  </scroll-view>
+
+  <view class="ms-list">
+    <message-item wx:for="{{list}}" wx:key="id" item="{{item}}"
+                  bindtap="onTap" bindlongpress="onLongPress"></message-item>
+  </view>
+
+  <empty-state wx:if="{{!loading && list.length === 0}}" text="暂无消息"></empty-state>
+  <view style="height: 40rpx;"></view>
+</view>

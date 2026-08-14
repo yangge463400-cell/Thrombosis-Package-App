@@ -1,0 +1,60 @@
+.mi {
+  display: flex;
+  align-items: flex-start;
+  min-height: 120rpx;
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 24rpx 32rpx;
+  box-sizing: border-box;
+  margin-bottom: 16rpx;
+}
+.mi-icon {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-right: 24rpx;
+  flex-shrink: 0;
+}
+.mi-icon-order { background: #E8F3FF; color: #1677FF; }
+.mi-icon-medication { background: #FFF7E6; color: #AD6800; }
+.mi-icon-result { background: #F0F5EB; color: #52C41A; }
+.mi-icon-system { background: #F2F4F7; color: #666666; }
+.mi-body { flex: 1; overflow: hidden; }
+.mi-title-row { display: flex; align-items: center; }
+.mi-title {
+  font-size: 36rpx;
+  color: #333333;
+  font-weight: normal;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.mi-unread .mi-title { color: #FF4D4F; font-weight: bold; }
+.mi-dot {
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 50%;
+  background: #FF4D4F;
+  margin-left: 12rpx;
+  flex-shrink: 0;
+}
+.mi-desc {
+  display: block;
+  font-size: 32rpx;
+  color: #666666;
+  margin-top: 8rpx;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.mi-time {
+  display: block;
+  font-size: 28rpx;
+  color: #999999;
+  margin-top: 8rpx;
+}

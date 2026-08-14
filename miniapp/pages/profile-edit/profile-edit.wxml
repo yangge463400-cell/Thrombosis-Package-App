@@ -1,0 +1,50 @@
+<view class="pe-page">
+  <nav-bar title="个人档案" showBack></nav-bar>
+
+  <view class="page">
+    <view class="card">
+      <!-- 性别 -->
+      <view class="pe-row">
+        <text class="pe-label">性别</text>
+        <view class="pe-radio-group">
+          <view class="pe-radio {{gender === 1 ? 'pe-radio-active' : ''}}" bindtap="setGender" data-gender="1">男</view>
+          <view class="pe-radio {{gender === 2 ? 'pe-radio-active' : ''}}" bindtap="setGender" data-gender="2">女</view>
+        </view>
+      </view>
+
+      <!-- 年龄 -->
+      <view class="pe-row">
+        <text class="pe-label">年龄</text>
+        <view class="pe-input-wrap">
+          <input class="pe-input" type="number" placeholder="请输入年龄" placeholder-class="input-ph"
+                 value="{{age}}" bindinput="onAge" />
+          <text class="pe-unit">岁</text>
+        </view>
+      </view>
+
+      <!-- 身高 -->
+      <view class="pe-row">
+        <text class="pe-label">身高</text>
+        <view class="pe-input-wrap">
+          <input class="pe-input" type="number" placeholder="请输入身高" placeholder-class="input-ph"
+                 value="{{height}}" bindinput="onHeight" />
+          <text class="pe-unit">cm</text>
+        </view>
+      </view>
+
+      <!-- 体重 -->
+      <view class="pe-row">
+        <text class="pe-label">体重</text>
+        <view class="pe-input-wrap">
+          <input class="pe-input" type="digit" placeholder="请输入体重" placeholder-class="input-ph"
+                 value="{{weight}}" bindinput="onWeight" />
+          <text class="pe-unit">kg</text>
+        </view>
+      </view>
+    </view>
+
+    <button class="btn btn-primary pe-save mt-4" bindtap="onSave" loading="{{saving}}">保存</button>
+
+    <text class="pe-tip mt-4">档案信息仅用于检测项目匹配与医护参考，严格保密</text>
+  </view>
+</view>

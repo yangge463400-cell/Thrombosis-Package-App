@@ -1,0 +1,15 @@
+<view class="mdt-page">
+  <nav-bar title="消息详情" showBack></nav-bar>
+
+  <view class="page">
+    <view class="mdt-head">
+      <text class="mdt-title">{{msg.title}}</text>
+      <text class="mdt-time">{{msg.createdAt}}</text>
+    </view>
+    <view class="card mdt-body">
+      <text class="mdt-content">{{msg.content}}</text>
+    </view>
+
+    <button wx:if="{{actionText}}" class="btn btn-primary mdt-action mt-4" bindtap="onAction">{{actionText}}</button>
+  </view>
+</view>

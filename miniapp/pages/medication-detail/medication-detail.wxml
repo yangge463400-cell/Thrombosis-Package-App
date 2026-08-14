@@ -1,0 +1,40 @@
+<view class="md-page">
+  <nav-bar title="用药详情" showBack></nav-bar>
+
+  <block wx:if="{{medication}}">
+    <!-- 方案信息 -->
+    <view class="card md-info mt-3">
+      <view class="md-drug-row">
+        <text class="md-drug">{{medication.drugName}}</text>
+        <text class="md-status">{{medication.status === 'active' ? '服用中' : '已停止'}}</text>
+      </view>
+      <view class="md-row"><text class="md-label">剂量</text><text class="md-value">每次 {{medication.dosePerTime}} · 每日 {{medication.timesPerDay}} 次</text></view>
+      <view class="md-row"><text class="md-label">时间点</text><text class="md-value">{{timeText}}</text></view>
+      <view class="md-row"><text class="md-label">开始日期</text><text class="md-value">{{medication.startAt}}</text></view>
+    </view>
+
+    <!-- 近 7 日打卡 -->
+    <view class="card md-calendar mt-3">
+      <view class="t-card-title">近 7 日打卡</view>
+      <view class="md-cal-head">
+        <text class="md-cal-date" wx:for="{{weekDates}}" wx:key="*this">{{item}}</text>
+      </view>
+      <view class="md-cal-row" wx:for="{{timePoints}}" wx:key="id" wx:for-item="tp">
+        <text class="md-cal-time">{{tp.time}}</text>
+        <view class="md-cal-days">
+          <view wx:for="{{weekDates}}" wx:key="*this" wx:for-item="date"
+                class="md-cal-day {{isTaken(tp.id, date) ? 'day-taken' : ''}}">
+            <text>{{isTaken(tp.id, date) ? '✓' : ''}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 操作 -->
+    <view class="md-actions mt-4">
+      <button class="btn btn-plain md-btn" bindtap="onEdit">编辑</button>
+      <button class="btn btn-danger-ghost md-btn" bindtap="onDelete">删除</button>
+    </view>
+  </block>
+  <view style="height: 60rpx;"></view>
+</view>

@@ -1,0 +1,7 @@
+<view class="mri" catchtap="onTap">
+  <view class="mri-time">{{item.time}}</view>
+  <view class="mri-dose">{{item.dose}}</view>
+  <view class="mri-status {{item.taken ? 's-taken' : 's-untaken'}}">
+    <text>{{item.taken ? '已服' : '未服'}}</text>
+  </view>
+</view>

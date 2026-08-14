@@ -1,0 +1,23 @@
+.mri {
+  display: flex;
+  align-items: center;
+  min-height: 120rpx;
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 0 32rpx;
+  box-sizing: border-box;
+  margin-bottom: 16rpx;
+}
+.mri-time { font-size: 36rpx; font-weight: bold; color: #333333; width: 160rpx; }
+.mri-dose { flex: 1; font-size: 32rpx; color: #666666; }
+.mri-status {
+  min-width: 120rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 32rpx;
+  font-size: 32rpx;
+}
+.s-taken { background: #F0F5EB; color: #52C41A; }
+.s-untaken { background: #F2F4F7; color: #999999; }

@@ -1,0 +1,21 @@
+.rc-page { min-height: 100vh; background: #F5F7FA; }
+.rc-filter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 104rpx;
+  padding: 0 32rpx;
+  background: #FFFFFF;
+}
+.rc-date-picker { display: flex; align-items: center; }
+.rc-date-text { font-size: 36rpx; font-weight: 600; color: #333333; }
+.rc-arrow { font-size: 28rpx; color: #666666; margin-left: 8rpx; }
+.rc-clear { font-size: 32rpx; color: #1677FF; }
+.rc-list { padding: 24rpx 32rpx 0; }
+.rc-card { margin-bottom: 24rpx; }
+.rc-head { display: flex; align-items: center; justify-content: space-between; }
+.rc-pkg { font-size: 36rpx; font-weight: bold; color: #1F3A5F; }
+.rc-time { font-size: 28rpx; color: #999999; }
+.rc-row { display: flex; align-items: center; margin-top: 12rpx; }
+.rc-label { font-size: 32rpx; color: #999999; width: 140rpx; }
+.rc-value { font-size: 32rpx; color: #333333; }

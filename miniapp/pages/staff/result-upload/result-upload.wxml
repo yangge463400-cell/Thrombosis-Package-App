@@ -1,0 +1,45 @@
+<view class="ru-page">
+  <nav-bar title="出具检测结果" showBack></nav-bar>
+
+  <!-- 第一步：输入核销码查询订单 -->
+  <view class="card ru-form mt-3">
+    <view class="ru-row">
+      <text class="ru-label">核销码</text>
+      <input class="ru-input" type="number" maxlength="6" value="{{code}}" bindinput="onCodeInput"
+             placeholder="请输入订单核销码（6位数字）" placeholder-class="input-ph" />
+      <button class="btn btn-plain ru-query" size="mini" bindtap="onQuery" loading="{{querying}}">查询</button>
+    </view>
+
+    <!-- 订单信息（查询到后显示） -->
+    <block wx:if="{{orderInfo}}">
+      <view class="ru-order">
+        <text class="ru-order-name">{{orderInfo.packageName}}</text>
+        <text class="ru-order-no">订单号 {{orderInfo.orderNo}}</text>
+        <text class="ru-order-phone">用户 {{orderInfo.userPhone}}</text>
+      </view>
+    </block>
+  </view>
+
+  <!-- 第二步：填写结果 -->
+  <block wx:if="{{orderInfo}}">
+    <view class="card ru-form mt-3">
+      <view class="ru-row">
+        <text class="ru-label">检测结论</text>
+        <view class="ru-radio-group">
+          <view class="ru-radio {{conclusion === 'normal' ? 'ru-radio-active' : ''}}" bindtap="setConclusion" data-v="normal">正常</view>
+          <view class="ru-radio {{conclusion === 'abnormal' ? 'ru-radio-active' : ''}}" bindtap="setConclusion" data-v="abnormal">异常</view>
+        </view>
+      </view>
+      <view class="ru-row">
+        <text class="ru-label">报告链接</text>
+        <input class="ru-input" value="{{reportUrl}}" bindinput="onUrlInput"
+               placeholder="报告 PDF/图片 URL（可选）" placeholder-class="input-ph" />
+      </view>
+      <view class="ru-note">
+        <text>出具后用户将收到通知，订单状态自动变为「已完成」</text>
+      </view>
+    </view>
+
+    <button class="btn btn-primary ru-submit mt-4" bindtap="onSubmit" loading="{{submitting}}">确认出具结果</button>
+  </block>
+</view>

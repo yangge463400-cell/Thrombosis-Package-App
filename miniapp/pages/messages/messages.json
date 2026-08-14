@@ -1,0 +1,9 @@
+{
+  "navigationStyle": "custom",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "nav-bar": "/components/nav-bar/nav-bar",
+    "message-item": "/components/message-item/message-item",
+    "empty-state": "/components/empty-state/empty-state"
+  }
+}

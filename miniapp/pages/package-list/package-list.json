@@ -1,0 +1,10 @@
+{
+  "navigationStyle": "custom",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "nav-bar": "/components/nav-bar/nav-bar",
+    "filter-bar": "/components/filter-bar/filter-bar",
+    "package-card": "/components/package-card/package-card",
+    "empty-state": "/components/empty-state/empty-state"
+  }
+}

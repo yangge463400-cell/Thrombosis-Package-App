@@ -1,0 +1,39 @@
+.reg-page { min-height: 100vh; background: #F5F7FA; }
+.avatar-card { display: flex; }
+.avatar-row { display: flex; align-items: center; width: 100%; }
+.avatar-btn {
+  width: 140rpx;
+  height: 140rpx;
+  padding: 0;
+  background: #E8F3FF;
+  border-radius: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.avatar-btn::after { border: none; }
+.avatar-img { width: 140rpx; height: 140rpx; border-radius: 32rpx; }
+.avatar-placeholder { font-size: 32rpx; color: #1677FF; }
+.avatar-info { flex: 1; margin-left: 32rpx; }
+.nick-input { font-size: 36rpx; height: 88rpx; line-height: 88rpx; }
+
+.code-row { justify-content: space-between; }
+.agree-row { display: flex; align-items: center; }
+.agree-box {
+  width: 44rpx; height: 44rpx; border-radius: 12rpx;
+  border: 2rpx solid #C0C8D4;
+  display: flex; align-items: center; justify-content: center;
+  margin-right: 12rpx;
+}
+.agree-checked { background: #1677FF; border-color: #1677FF; }
+.agree-mark { color: #FFFFFF; font-size: 28rpx; }
+.agree-text { font-size: 28rpx; color: #666666; }
+.agree-link { font-size: 28rpx; color: #1677FF; }
+.submit-btn { width: 100%; }
+.reg-tip {
+  display: block; text-align: center; margin-top: 24rpx;
+  font-size: 28rpx; color: #999999;
+}

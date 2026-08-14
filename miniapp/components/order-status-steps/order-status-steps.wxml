@@ -1,0 +1,10 @@
+<view class="steps">
+  <view wx:for="{{steps}}" wx:key="index" class="step {{index < current ? 'done' : (index === current ? 'active' : '')}}">
+    <view class="step-dot">
+      <text wx:if="{{index < current}}">✓</text>
+      <text wx:elif="{{index === current}}">●</text>
+    </view>
+    <text class="step-text">{{item}}</text>
+    <view wx:if="{{index < steps.length - 1}}" class="step-line {{index < current ? 'line-done' : ''}}"></view>
+  </view>
+</view>

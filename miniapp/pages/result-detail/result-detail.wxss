@@ -1,0 +1,47 @@
+.rd-page { min-height: 100vh; background: #F5F7FA; }
+.rd-disclaimer {
+  margin: 24rpx 32rpx 0;
+  background: #FFF7E6;
+  border-radius: 16rpx;
+  padding: 24rpx 32rpx;
+}
+.rd-disc-title { display: block; font-size: 34rpx; font-weight: bold; color: #AD6800; }
+.rd-disc-text {
+  display: block;
+  font-size: 32rpx;
+  color: #AD6800;
+  line-height: 1.6;
+  margin-top: 8rpx;
+}
+.rd-head { margin: 24rpx 32rpx 0; }
+.rd-row { display: flex; align-items: center; margin-top: 12rpx; }
+.rd-label { font-size: 32rpx; color: #999999; width: 160rpx; flex-shrink: 0; }
+.rd-value { font-size: 32rpx; color: #333333; }
+
+.rd-items { margin: 24rpx 32rpx 0; }
+.rd-items-head, .rd-item {
+  display: flex;
+  align-items: center;
+  min-height: 100rpx;
+}
+.rd-items-head {
+  border-bottom: 2rpx solid #EEF1F6;
+  color: #999999;
+  font-size: 30rpx;
+}
+.rd-item { border-bottom: 1rpx solid #EEF1F6; font-size: 34rpx; color: #333333; }
+.rd-item-abnormal { background: #FFF1F0; }
+.rd-col-name { flex: 1.2; padding-right: 16rpx; }
+.rd-col-value { flex: 1; font-weight: 600; }
+.rd-col-range { flex: 1; color: #999999; font-size: 30rpx; }
+.rd-abnormal { color: #FF4D4F; font-weight: bold; }
+.rd-warn {
+  margin-top: 20rpx;
+  font-size: 32rpx;
+  color: #FF4D4F;
+  background: #FFF1F0;
+  padding: 20rpx 24rpx;
+  border-radius: 12rpx;
+}
+.rd-actions { display: flex; gap: 24rpx; padding: 0 32rpx; }
+.rd-btn { flex: 1; }

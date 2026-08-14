@@ -1,0 +1,43 @@
+<view class="rd-page">
+  <nav-bar title="检测结果" showBack></nav-bar>
+
+  <block wx:if="{{result}}">
+    <!-- 免责声明 -->
+    <view class="rd-disclaimer">
+      <text class="rd-disc-title">温馨提示</text>
+      <text class="rd-disc-text">本检测结果仅用于健康管理参考，不构成医疗诊断，如有疑问请咨询医生。</text>
+    </view>
+
+    <!-- 报告头部 -->
+    <view class="card rd-head mt-3">
+      <view class="t-card-title">{{result.packageName || '检测报告'}}</view>
+      <view class="rd-row"><text class="rd-label">检测日期</text><text class="rd-value">{{result.publishedAt || result.uploadedAt}}</text></view>
+      <view wx:if="{{result.hospitalName}}" class="rd-row"><text class="rd-label">检测医院</text><text class="rd-value">{{result.hospitalName}}</text></view>
+      <view class="rd-row"><text class="rd-label">报告编号</text><text class="rd-value">RPT{{result.id}}</text></view>
+    </view>
+
+    <!-- 指标表 -->
+    <view class="card rd-items mt-3">
+      <view class="rd-items-head">
+        <text class="rd-col-name">指标</text>
+        <text class="rd-col-value">结果</text>
+        <text class="rd-col-range">参考范围</text>
+      </view>
+      <view class="rd-item {{item.abnormal ? 'rd-item-abnormal' : ''}}"
+            wx:for="{{result.reportItems}}" wx:key="name">
+        <text class="rd-col-name">{{item.name}}</text>
+        <text class="rd-col-value {{item.abnormal ? 'rd-abnormal' : ''}}">{{item.value}} {{item.unit}}</text>
+        <text class="rd-col-range">{{item.range}}</text>
+      </view>
+      <view wx:if="{{hasAbnormal}}" class="rd-warn">↑ 标红指标超出参考范围，请及时咨询医生</view>
+    </view>
+
+    <!-- 底部操作 -->
+    <view class="rd-actions mt-4">
+      <button class="btn btn-plain rd-btn" bindtap="contactService">联系客服</button>
+      <button class="btn btn-primary rd-btn" bindtap="buyAgain">再次购买套餐</button>
+    </view>
+  </block>
+
+  <empty-state wx:elif="{{!loading}}" text="检测结果暂未更新，请稍后重试" btnText="刷新" bindaction="loadDetail"></empty-state>
+</view>

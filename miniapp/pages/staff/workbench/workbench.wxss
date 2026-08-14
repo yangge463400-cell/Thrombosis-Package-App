@@ -1,0 +1,74 @@
+.wb-page { min-height: 100vh; background: #F5F7FA; }
+.wb-staff {
+  display: flex;
+  align-items: center;
+  margin: 0 32rpx;
+  background: linear-gradient(135deg, #1677FF 0%, #4D9BFF 100%);
+  border-radius: 24rpx;
+  padding: 40rpx 32rpx;
+}
+.wb-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+  font-size: 48rpx;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.wb-staff-info { flex: 1; margin-left: 28rpx; }
+.wb-staff-name { display: block; font-size: 40rpx; font-weight: bold; color: #FFFFFF; }
+.wb-hospital { display: block; font-size: 28rpx; color: rgba(255, 255, 255, 0.85); margin-top: 8rpx; }
+.wb-role-tag {
+  font-size: 28rpx;
+  color: #1677FF;
+  background: #FFFFFF;
+  padding: 8rpx 24rpx;
+  border-radius: 28rpx;
+}
+
+.wb-scan-btn {
+  margin: 32rpx;
+  height: 320rpx;
+  background: linear-gradient(135deg, #1677FF 0%, #4D9BFF 100%);
+  border-radius: 32rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12rpx 32rpx rgba(22, 119, 255, 0.35);
+}
+.wb-scan-icon {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+  font-size: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wb-scan-text { font-size: 44rpx; font-weight: bold; color: #FFFFFF; margin-top: 24rpx; }
+.wb-scan-desc { font-size: 28rpx; color: rgba(255, 255, 255, 0.85); margin-top: 8rpx; }
+
+.wb-stats {
+  margin: 0 32rpx;
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 32rpx 0;
+  display: flex;
+  align-items: center;
+}
+.wb-stat { flex: 1; display: flex; flex-direction: column; align-items: center; }
+.wb-stat-num { font-size: 60rpx; font-weight: bold; color: #1677FF; }
+.wb-stat-warn { color: #FAAD14; }
+.wb-stat-label { font-size: 32rpx; color: #666666; margin-top: 8rpx; }
+.wb-stat-divider { width: 2rpx; height: 72rpx; background: #EEF1F6; }
+
+.wb-menu { margin: 24rpx 32rpx 0; padding: 0; overflow: hidden; }
+.wb-logout { width: calc(100% - 64rpx); margin-left: 32rpx; margin-right: 32rpx; }

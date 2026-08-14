@@ -1,0 +1,13 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6rpx 20rpx;
+  border-radius: 28rpx;
+  font-size: 28rpx;
+  line-height: 1.4;
+}
+.tag-success { background: #F0F5EB; color: #52C41A; }
+.tag-warning { background: #FFF7E6; color: #AD6800; }
+.tag-danger { background: #FFF1F0; color: #FF4D4F; }
+.tag-primary { background: #E8F3FF; color: #1677FF; }
+.tag-default { background: #F2F4F7; color: #666666; }

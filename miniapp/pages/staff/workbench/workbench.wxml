@@ -1,0 +1,51 @@
+<view class="wb-page">
+  <nav-bar title="医护工作台"></nav-bar>
+
+  <!-- 医护信息卡 -->
+  <view class="wb-staff">
+    <view class="wb-avatar">{{staffName ? staffName[0] : '医'}}</view>
+    <view class="wb-staff-info">
+      <text class="wb-staff-name">{{staffName}}</text>
+      <text class="wb-hospital">{{hospitalName}}</text>
+    </view>
+    <view class="wb-role-tag">医护</view>
+  </view>
+
+  <!-- 扫码核销大按钮 -->
+  <view class="wb-scan-btn" bindtap="onScan">
+    <view class="wb-scan-icon">⌕</view>
+    <text class="wb-scan-text">扫码核销</text>
+    <text class="wb-scan-desc">扫描用户出示的核销码</text>
+  </view>
+
+  <!-- 今日统计 -->
+  <view class="wb-stats">
+    <view class="wb-stat">
+      <text class="wb-stat-num">{{stats.todayVerified || 0}}</text>
+      <text class="wb-stat-label">今日核销</text>
+    </view>
+    <view class="wb-stat-divider"></view>
+    <view class="wb-stat">
+      <text class="wb-stat-num wb-stat-warn">{{stats.pendingCount || 0}}</text>
+      <text class="wb-stat-label">待处理</text>
+    </view>
+  </view>
+
+  <!-- 功能入口 -->
+  <view class="card wb-menu mt-3">
+    <view class="cell" bindtap="goRecord">
+      <text class="cell-label">核销记录</text>
+      <text class="cell-arrow">›</text>
+    </view>
+    <view class="cell" bindtap="goManualInput">
+      <text class="cell-label">手动输入核销码</text>
+      <text class="cell-arrow">›</text>
+    </view>
+    <view class="cell" bindtap="goUpload">
+      <text class="cell-label">出具检测结果</text>
+      <text class="cell-arrow">›</text>
+    </view>
+  </view>
+
+  <button class="btn btn-plain wb-logout mt-4" bindtap="onLogout">退出登录</button>
+</view>

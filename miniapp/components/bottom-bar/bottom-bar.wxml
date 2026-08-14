@@ -1,0 +1,10 @@
+<view class="bottom-bar safe-bottom">
+  <view class="bb-left" wx:if="{{price !== null && price !== undefined}}">
+    <text class="bb-label">合计：</text>
+    <text class="bb-price">¥{{priceText}}</text>
+  </view>
+  <view class="bb-left" wx:else><slot name="left"></slot></view>
+  <view class="bb-btn-wrap">
+    <slot name="buttons"></slot>
+  </view>
+</view>

@@ -1,0 +1,49 @@
+<view class="hl-page">
+  <nav-bar title="合作医院" showBack></nav-bar>
+
+  <!-- 城市选择 -->
+  <view class="hl-city">
+    <view class="hl-city-current" bindtap="openCityPicker">
+      <text class="hl-loc-icon">⌖</text>
+      <text class="hl-city-text">{{city || '选择城市'}}</text>
+      <text class="hl-arrow">▾</text>
+    </view>
+    <text class="hl-city-tip">用于就近查找合作医院</text>
+  </view>
+
+  <!-- 城市面板 -->
+  <view wx:if="{{showPicker}}" class="city-mask" bindtap="closePicker"></view>
+  <view wx:if="{{showPicker}}" class="city-panel">
+    <scroll-view scroll-y class="city-list">
+      <view wx:for="{{cities}}" wx:key="*this"
+            class="city-item {{city === item ? 'city-active' : ''}}"
+            bindtap="selectCity" data-city="{{item}}">{{item}}</view>
+    </scroll-view>
+  </view>
+
+  <!-- 医院列表 -->
+  <view class="hl-list">
+    <view class="card hl-card" wx:for="{{list}}" wx:key="id">
+      <view class="hl-name">{{item.name}}</view>
+      <view class="hl-info-row">
+        <text class="hl-info-label">地址</text>
+        <text class="hl-info-value">{{item.address}}</text>
+      </view>
+      <view class="hl-info-row">
+        <text class="hl-info-label">电话</text>
+        <text class="hl-info-value">{{item.phone}}</text>
+      </view>
+      <view class="hl-info-row">
+        <text class="hl-info-label">检测时间</text>
+        <text class="hl-info-value">{{item.detectTime}}</text>
+      </view>
+      <view class="hl-actions">
+        <button class="btn btn-plain hl-btn" bindtap="callPhone" data-phone="{{item.phone}}">拨打电话</button>
+        <button class="btn btn-primary hl-btn" bindtap="openMap" data-lat="{{item.lat}}" data-lng="{{item.lng}}" data-name="{{item.name}}">导航</button>
+      </view>
+    </view>
+  </view>
+
+  <empty-state wx:if="{{!loading && list.length === 0}}" text="该城市暂无合作医院"></empty-state>
+  <view style="height: 40rpx;"></view>
+</view>

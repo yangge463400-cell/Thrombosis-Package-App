@@ -1,0 +1,16 @@
+<view class="pl-page">
+  <nav-bar title="检测套餐"></nav-bar>
+  <filter-bar cities="{{cities}}" items="{{dictItems}}" city="{{city}}" itemIds="{{itemIds}}"
+              sort="{{sort}}" bindchange="onFilterChange"></filter-bar>
+
+  <view class="pl-list">
+    <package-card wx:for="{{list}}" wx:key="id" pkg="{{item}}" bindtap="onCardTap"></package-card>
+  </view>
+
+  <empty-state wx:if="{{!loading && list.length === 0}}" text="暂无符合条件的套餐" btnText="清除筛选"
+               bindaction="clearFilter"></empty-state>
+
+  <view wx:if="{{loading}}" class="pl-loading">加载中...</view>
+  <view wx:if="{{finished && list.length > 0}}" class="pl-loading">没有更多了</view>
+  <view style="height: 40rpx;"></view>
+</view>

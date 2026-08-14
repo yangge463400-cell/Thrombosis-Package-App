@@ -1,0 +1,44 @@
+.fb { position: relative; z-index: 20; background: #FFFFFF; }
+.fb-tabs { display: flex; height: 96rpx; }
+.fb-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  color: #666666;
+  height: 96rpx;
+}
+.fb-tab.fb-active { color: #1677FF; font-weight: 600; }
+.fb-arrow { margin-left: 8rpx; font-size: 28rpx; }
+.fb-mask {
+  position: fixed;
+  left: 0; right: 0; top: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 19;
+}
+.fb-panel {
+  position: absolute;
+  left: 0; right: 0; top: 96rpx;
+  background: #FFFFFF;
+  z-index: 21;
+  max-height: 640rpx;
+  box-shadow: 0 8rpx 24rpx rgba(10, 30, 60, 0.12);
+}
+.fb-list { max-height: 480rpx; padding: 16rpx 32rpx; box-sizing: border-box; }
+.fb-option {
+  display: flex;
+  align-items: center;
+  min-height: 96rpx;
+  font-size: 34rpx;
+  color: #333333;
+  border-bottom: 1rpx solid #EEF1F6;
+}
+.fb-option-active { color: #1677FF; font-weight: 600; background: #E8F3FF; border-radius: 12rpx; }
+.fb-actions {
+  display: flex;
+  gap: 24rpx;
+  padding: 24rpx 32rpx;
+  box-sizing: border-box;
+}
+.fb-btn { flex: 1; }

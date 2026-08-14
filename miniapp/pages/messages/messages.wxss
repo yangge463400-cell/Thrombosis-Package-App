@@ -1,0 +1,30 @@
+.ms-page { min-height: 100vh; background: #F5F7FA; }
+.ms-tabs {
+  display: flex;
+  background: #FFFFFF;
+  white-space: nowrap;
+  padding: 0 16rpx;
+}
+.ms-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 104rpx;
+  padding: 0 36rpx;
+  font-size: 32rpx;
+  color: #666666;
+  position: relative;
+}
+.ms-tab-active { color: #1677FF; font-weight: 600; }
+.ms-tab-active::after {
+  content: '';
+  position: absolute;
+  bottom: 8rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48rpx;
+  height: 6rpx;
+  border-radius: 3rpx;
+  background: #1677FF;
+}
+.ms-list { padding: 24rpx 32rpx 0; }

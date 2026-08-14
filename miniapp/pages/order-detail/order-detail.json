@@ -1,0 +1,9 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "nav-bar": "/components/nav-bar/nav-bar",
+    "tag": "/components/tag/tag",
+    "price-display": "/components/price-display/price-display",
+    "order-status-steps": "/components/order-status-steps/order-status-steps"
+  }
+}

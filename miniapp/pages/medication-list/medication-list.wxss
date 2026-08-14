@@ -1,0 +1,45 @@
+.ml-page { min-height: 100vh; background: #F5F7FA; }
+.ml-banner {
+  margin: 24rpx 32rpx 0;
+  background: linear-gradient(135deg, #1677FF 0%, #4D9BFF 100%);
+  border-radius: 16rpx;
+  padding: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ml-banner-title { display: block; font-size: 36rpx; font-weight: bold; color: #FFFFFF; }
+.ml-banner-desc { display: block; font-size: 28rpx; color: rgba(255, 255, 255, 0.85); margin-top: 8rpx; }
+.ml-banner-btn { width: 320rpx; height: 88rpx; font-size: 30rpx; margin-left: 16rpx; }
+
+.ml-list { padding: 24rpx 32rpx 0; }
+.ml-card { margin-bottom: 24rpx; }
+.ml-head { display: flex; align-items: center; justify-content: space-between; }
+.ml-drug { font-size: 40rpx; font-weight: bold; color: #1F3A5F; }
+.ml-dose { display: block; font-size: 32rpx; color: #666666; margin-top: 12rpx; }
+.ml-times { display: flex; flex-wrap: wrap; gap: 12rpx; margin-top: 16rpx; }
+.ml-time {
+  font-size: 30rpx;
+  color: #1677FF;
+  background: #E8F3FF;
+  padding: 8rpx 24rpx;
+  border-radius: 28rpx;
+}
+
+.ml-today-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32rpx;
+}
+.ml-today-count { font-size: 32rpx; color: #52C41A; font-weight: 600; }
+.ml-today { padding: 16rpx 32rpx 0; }
+
+.ml-footer {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  background: #FFFFFF;
+  padding: 16rpx 32rpx;
+  box-shadow: 0 -4rpx 16rpx rgba(10, 30, 60, 0.06);
+}
+.ml-add-btn { width: 100%; }

@@ -1,0 +1,45 @@
+<view class="reg-page">
+  <nav-bar title="注册" showBack></nav-bar>
+
+  <view class="page">
+    <!-- 头像昵称（微信填写能力，可选） -->
+    <view class="card avatar-card">
+      <view class="avatar-row">
+        <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+          <image wx:if="{{avatar}}" class="avatar-img" src="{{avatar}}"></image>
+          <view wx:else class="avatar-placeholder">头像</view>
+        </button>
+        <view class="avatar-info">
+          <input class="nick-input" type="nickname" placeholder="点击设置昵称（选填）" placeholder-class="input-ph"
+                 value="{{nickname}}" bindinput="onNickname" />
+        </view>
+      </view>
+    </view>
+
+    <!-- 手机号 + 验证码 -->
+    <view class="card mt-3">
+      <view class="input-wrap">
+        <input class="input" type="number" maxlength="11" placeholder="请输入手机号" placeholder-class="input-ph"
+               value="{{phone}}" bindinput="onPhone" />
+      </view>
+      <view class="input-wrap mt-3 code-row">
+        <input class="input" type="number" maxlength="6" placeholder="请输入验证码" placeholder-class="input-ph"
+               value="{{code}}" bindinput="onCode" />
+        <count-down id="cd" bindstart="onSendCode" text="获取验证码"></count-down>
+      </view>
+    </view>
+
+    <view class="agree-row mt-4">
+      <view class="agree-box {{agreed ? 'agree-checked' : ''}}" bindtap="toggleAgree">
+        <text wx:if="{{agreed}}" class="agree-mark">✓</text>
+      </view>
+      <text class="agree-text">我已阅读并同意</text>
+      <text class="agree-link">《用户协议》</text>
+      <text class="agree-text">和</text>
+      <text class="agree-link">《隐私政策》</text>
+    </view>
+
+    <button class="btn btn-primary submit-btn mt-4" bindtap="onSubmit" loading="{{loading}}">注册并登录</button>
+    <text class="reg-tip">注册后自动关联微信账号，下次可直接登录</text>
+  </view>
+</view>

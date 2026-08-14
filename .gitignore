@@ -1,0 +1,44 @@
+# ===== Node.js / Vue 管理端 =====
+node_modules/
+dist/
+dist-ssr/
+*.local
+.vite/
+
+# ===== 构建与日志 =====
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# ===== Java / Spring Boot 后端 =====
+backend/target/
+*.class
+*.jar
+*.war
+*.ear
+
+# ===== 环境变量与敏感文件 =====
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.jks
+
+# ===== 微信小程序私有配置 =====
+miniapp/project.private.config.json
+
+# ===== IDE 与操作系统 =====
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== 工具本地数据（不参与版本管理） =====
+.workbuddy/
+.claude/

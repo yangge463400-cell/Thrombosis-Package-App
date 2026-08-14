@@ -1,0 +1,184 @@
+/* ============================================================
+   血栓检测小程序 · 全局样式（design-tokens 全量落地，适老化硬指标）
+   依据：design-tokens.json + 规格文档 2.1
+   ============================================================ */
+page {
+  /* ---------- 颜色 ---------- */
+  --primary: #1677FF;
+  --success: #52C41A;
+  --danger: #FF4D4F;
+  --warning: #FAAD14;
+  --bg: #F5F7FA;
+  --card: #FFFFFF;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-tertiary: #999999;
+  --text-heading: #1F3A5F;
+  --border: #EEF1F6;
+  --primary-bg: #E8F3FF;
+  --success-bg: #F0F5EB;
+  --warning-bg: #FFF7E6;
+  --danger-bg: #FFF1F0;
+  --warning-text: #AD6800;
+  --disabled: #C0C8D4;
+
+  /* ---------- 字号（适老化） ---------- */
+  --fs-page-title: 44rpx;
+  --fs-card-title: 40rpx;
+  --fs-body: 36rpx;
+  --fs-secondary: 32rpx;
+  --fs-min: 28rpx;
+  --fs-button: 36rpx;
+  --fs-big: 60rpx;
+
+  /* ---------- 圆角 / 间距 / 高度 / 阴影 ---------- */
+  --radius-card: 16rpx;
+  --radius-button: 48rpx;
+  --radius-input: 24rpx;
+  --radius-tag: 28rpx;
+  --gap-1: 8rpx;
+  --gap-2: 16rpx;
+  --gap-3: 24rpx;
+  --gap-4: 32rpx;
+  --page-padding: 32rpx;
+  --h-button: 96rpx;
+  --h-input: 88rpx;
+  --h-row: 120rpx;
+  --shadow-card: 0 6rpx 20rpx rgba(10, 30, 60, 0.08);
+  --shadow-primary: 0 8rpx 24rpx rgba(22, 119, 255, 0.25);
+
+  background: var(--bg);
+  color: var(--text-primary);
+  font-size: var(--fs-body);
+  font-family: "Sarasa Gothic SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- 通用按钮 ---------- */
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--h-button);
+  border-radius: var(--radius-button);
+  font-size: var(--fs-button);
+  font-weight: 600;
+  box-sizing: border-box;
+  border: none;
+  line-height: 1;
+}
+.btn::after { border: none; }
+
+.btn-primary {
+  background: var(--primary);
+  color: #FFFFFF;
+  box-shadow: var(--shadow-primary);
+}
+.btn-primary.btn-disabled {
+  background: var(--disabled);
+  box-shadow: none;
+}
+.btn-ghost {
+  background: var(--primary-bg);
+  color: var(--primary);
+}
+.btn-outline {
+  background: var(--card);
+  color: var(--primary);
+  border: 2rpx solid var(--primary);
+}
+.btn-danger-ghost {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+.btn-plain {
+  background: var(--card);
+  color: var(--text-secondary);
+  border: 2rpx solid var(--border);
+}
+
+/* ---------- 卡片 ---------- */
+.card {
+  background: var(--card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: var(--gap-4);
+  box-sizing: border-box;
+}
+
+/* ---------- 文本层级 ---------- */
+.t-page-title { font-size: var(--fs-page-title); font-weight: bold; color: var(--text-heading); }
+.t-card-title { font-size: var(--fs-card-title); font-weight: bold; color: var(--text-heading); }
+.t-body { font-size: var(--fs-body); color: var(--text-primary); }
+.t-secondary { font-size: var(--fs-secondary); color: var(--text-secondary); }
+.t-min { font-size: var(--fs-min); color: var(--text-secondary); }
+.t-big { font-size: var(--fs-big); font-weight: bold; }
+.t-price { font-size: var(--fs-big); font-weight: bold; color: var(--danger); }
+.t-price-sm { font-size: var(--fs-card-title); font-weight: bold; color: var(--danger); }
+
+/* ---------- 标签 ---------- */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6rpx 20rpx;
+  border-radius: var(--radius-tag);
+  font-size: var(--fs-min);
+  line-height: 1.4;
+}
+.tag-success { background: var(--success-bg); color: var(--success); }
+.tag-warning { background: var(--warning-bg); color: var(--warning-text); }
+.tag-danger { background: var(--danger-bg); color: var(--danger); }
+.tag-primary { background: var(--primary-bg); color: var(--primary); }
+.tag-default { background: #F2F4F7; color: var(--text-secondary); }
+
+/* ---------- 列表单元格（热区 ≥120rpx） ---------- */
+.cell {
+  display: flex;
+  align-items: center;
+  min-height: var(--h-row);
+  padding: 0 var(--gap-4);
+  background: var(--card);
+  box-sizing: border-box;
+}
+.cell + .cell { border-top: 1rpx solid var(--border); }
+.cell-label { font-size: var(--fs-body); color: var(--text-primary); flex-shrink: 0; }
+.cell-value { font-size: var(--fs-body); color: var(--text-secondary); flex: 1; text-align: right; }
+.cell-arrow { font-size: 28rpx; color: var(--text-tertiary); margin-left: var(--gap-1); }
+
+/* ---------- 表单输入（适老 ≥88rpx） ---------- */
+.input-wrap {
+  display: flex;
+  align-items: center;
+  background: var(--card);
+  border-radius: var(--radius-input);
+  height: var(--h-input);
+  padding: 0 var(--gap-4);
+  box-sizing: border-box;
+}
+.input { flex: 1; font-size: var(--fs-body); height: 100%; color: var(--text-primary); }
+.input-ph { color: #9AA5B1; font-size: var(--fs-secondary); }
+
+/* ---------- 空状态 ---------- */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 120rpx 0;
+}
+.empty-icon { width: 160rpx; height: 160rpx; margin-bottom: var(--gap-3); opacity: 0.5; }
+.empty-text { font-size: var(--fs-secondary); color: var(--text-secondary); margin-bottom: var(--gap-4); }
+
+/* ---------- 底部安全区 ---------- */
+.safe-bottom {
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ---------- 通用布局 ---------- */
+.page { padding: var(--page-padding); box-sizing: border-box; }
+.row { display: flex; align-items: center; }
+.flex-1 { flex: 1; }
+.mt-2 { margin-top: var(--gap-2); }
+.mt-3 { margin-top: var(--gap-3); }
+.mt-4 { margin-top: var(--gap-4); }
+.mb-4 { margin-bottom: var(--gap-4); }

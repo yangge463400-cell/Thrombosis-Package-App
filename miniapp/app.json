@@ -1,0 +1,73 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/register/register",
+    "pages/index/index",
+    "pages/package-list/package-list",
+    "pages/package-detail/package-detail",
+    "pages/order-confirm/order-confirm",
+    "pages/order-list/order-list",
+    "pages/order-detail/order-detail",
+    "pages/hospital-list/hospital-list",
+    "pages/result-list/result-list",
+    "pages/result-detail/result-detail",
+    "pages/medication-list/medication-list",
+    "pages/medication-edit/medication-edit",
+    "pages/medication-detail/medication-detail",
+    "pages/messages/messages",
+    "pages/message-detail/message-detail",
+    "pages/profile/profile",
+    "pages/profile-edit/profile-edit",
+    "pages/staff/workbench/workbench",
+    "pages/staff/scan/scan",
+    "pages/staff/verify-result/verify-result",
+    "pages/staff/record/record",
+    "pages/staff/result-upload/result-upload"
+  ],
+  "window": {
+    "navigationStyle": "custom",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#F5F7FA",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#1677FF",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/tabbar/home.png",
+        "selectedIconPath": "images/tabbar/home-active.png"
+      },
+      {
+        "pagePath": "pages/package-list/package-list",
+        "text": "检测套餐",
+        "iconPath": "images/tabbar/package.png",
+        "selectedIconPath": "images/tabbar/package-active.png"
+      },
+      {
+        "pagePath": "pages/messages/messages",
+        "text": "消息",
+        "iconPath": "images/tabbar/bell.png",
+        "selectedIconPath": "images/tabbar/bell-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "images/tabbar/user.png",
+        "selectedIconPath": "images/tabbar/user-active.png"
+      }
+    ]
+  },
+  "lazyCodeLoading": "requiredComponents",
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于查找您附近的合作医院"
+    }
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

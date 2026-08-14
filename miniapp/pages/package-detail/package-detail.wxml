@@ -1,0 +1,74 @@
+<view class="pd-page">
+  <nav-bar title="套餐详情" showBack></nav-bar>
+
+  <block wx:if="{{pkg}}">
+    <!-- 轮播图 -->
+    <swiper class="pd-swiper" indicator-dots circular indicator-active-color="#1677FF">
+      <swiper-item wx:for="{{images}}" wx:key="*this">
+        <image class="pd-img" src="{{item}}" mode="aspectFill"></image>
+      </swiper-item>
+    </swiper>
+
+    <!-- 价格区 -->
+    <view class="pd-price-card">
+      <view class="pd-price-row">
+        <price-display value="{{pkg.price}}" size="big" color="danger"></price-display>
+        <text class="pd-status-off" wx:if="{{pkg.status !== 'on'}}">已下架</text>
+      </view>
+      <view class="pd-name">{{pkg.name}}</view>
+      <view class="pd-sales">已售 {{pkg.salesCount || 0}} 份 · 合作医院 {{pkg.hospitalCount || 0}} 家</view>
+    </view>
+
+    <!-- 检测项目 -->
+    <view class="card pd-section mt-3">
+      <view class="t-card-title">检测项目</view>
+      <view class="pd-item" wx:for="{{pkg.items}}" wx:key="name">
+        <view class="pd-item-icon">✓</view>
+        <view class="pd-item-info">
+          <text class="pd-item-name">{{item.name}}</text>
+          <text class="pd-item-desc">{{item.desc}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 适用人群 -->
+    <view class="card pd-section mt-3">
+      <view class="t-card-title">适用人群</view>
+      <view class="pd-tags">
+        <tag wx:for="{{pkg.targetPopulation}}" wx:key="*this" text="{{item}}" type="default"></tag>
+      </view>
+    </view>
+
+    <!-- 合作医院范围 -->
+    <view class="card pd-section mt-3" bindtap="goHospitals">
+      <view class="pd-link-row">
+        <text class="t-card-title">合作医院范围</text>
+        <text class="pd-link">查看合作医院 ›</text>
+      </view>
+      <view class="pd-tags">
+        <tag wx:for="{{pkg.cities}}" wx:key="*this" text="{{item}}" type="primary"></tag>
+      </view>
+    </view>
+
+    <!-- 购买须知 -->
+    <view class="card pd-section mt-3">
+      <view class="pd-collapse" bindtap="toggleNotice">
+        <text class="t-card-title">购买须知</text>
+        <text class="pd-arrow">{{showNotice ? '▴' : '▾'}}</text>
+      </view>
+      <text wx:if="{{showNotice}}" class="pd-notice">{{pkg.notice}}</text>
+    </view>
+
+    <view style="height: 200rpx;"></view>
+
+    <bottom-bar price="{{pkg.price}}">
+      <view slot="buttons">
+        <button class="btn btn-primary pd-buy" disabled="{{pkg.status !== 'on'}}"
+                style="{{pkg.status !== 'on' ? 'background:#C0C8D4;box-shadow:none;' : ''}}"
+                bindtap="onBuy">立即购买</button>
+      </view>
+    </bottom-bar>
+  </block>
+
+  <empty-state wx:elif="{{!loading}}" text="套餐加载失败" btnText="重新加载" bindaction="loadDetail"></empty-state>
+</view>

@@ -1,0 +1,32 @@
+.vci {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  height: 120rpx;
+}
+.vci-cell {
+  width: 96rpx;
+  height: 120rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx solid #EEF1F6;
+  border-radius: 24rpx;
+  background: #FFFFFF;
+  font-size: 60rpx;
+  font-weight: bold;
+  color: #333333;
+  box-sizing: border-box;
+}
+.vci-filled {
+  border-color: #1677FF;
+  color: #1677FF;
+}
+.vci-hidden {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 10rpx;
+  height: 10rpx;
+  opacity: 0;
+}

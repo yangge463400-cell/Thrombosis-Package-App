@@ -1,0 +1,64 @@
+<view class="me-page">
+  <nav-bar title="{{id ? '编辑用药' : '新增用药'}}" showBack></nav-bar>
+
+  <view class="page">
+    <!-- 药物名称 -->
+    <view class="card">
+      <view class="t-card-title">药物名称</view>
+      <view class="me-chips mt-3">
+        <view wx:for="{{drugChips}}" wx:key="*this"
+              class="me-chip {{drugName === item ? 'me-chip-active' : ''}}"
+              bindtap="selectDrug" data-name="{{item}}">{{item}}</view>
+      </view>
+      <view class="input-wrap mt-3">
+        <input class="input" placeholder="或自定义输入药物名" placeholder-class="input-ph"
+               value="{{drugName}}" bindinput="onDrugName" />
+      </view>
+    </view>
+
+    <!-- 剂量 -->
+    <view class="card mt-3">
+      <view class="t-card-title">剂量</view>
+      <view class="me-dose-row mt-3">
+        <text class="me-label">每次剂量</text>
+        <view class="me-dose-input">
+          <input class="input" type="digit" placeholder="如 3" placeholder-class="input-ph"
+                 value="{{doseNum}}" bindinput="onDoseNum" />
+          <picker mode="selector" range="{{doseUnits}}" value="{{doseUnitIndex}}" bindchange="onDoseUnit">
+            <view class="me-unit">{{doseUnits[doseUnitIndex]}} ▾</view>
+          </picker>
+        </view>
+      </view>
+      <view class="me-dose-row mt-3">
+        <text class="me-label">每日次数</text>
+        <stepper value="{{timesPerDay}}" min="1" max="6" bindchange="onTimesChange"></stepper>
+      </view>
+    </view>
+
+    <!-- 服用时间点 -->
+    <view class="card mt-3">
+      <view class="me-time-head">
+        <text class="t-card-title">服用时间点</text>
+        <text class="me-add-time" bindtap="addTime">＋ 添加</text>
+      </view>
+      <view class="me-time-item" wx:for="{{timePoints}}" wx:key="id">
+        <picker mode="time" value="{{item.time}}" bindchange="onTimeChange" data-index="{{index}}">
+          <view class="me-time-picker">{{item.time}} ▾</view>
+        </picker>
+        <text class="me-time-label">第{{index + 1}}次</text>
+        <text wx:if="{{timePoints.length > 1}}" class="me-del-time" bindtap="removeTime" data-index="{{index}}">删除</text>
+      </view>
+    </view>
+
+    <!-- 提醒开关 -->
+    <view class="card mt-3 me-remind">
+      <view>
+        <text class="me-remind-title">服药提醒</text>
+        <text class="me-remind-desc">到时间通过订阅消息提醒您</text>
+      </view>
+      <switch checked="{{reminderOn}}" color="#1677FF" bindchange="onRemindChange" />
+    </view>
+
+    <button class="btn btn-primary me-save mt-4" bindtap="onSave" loading="{{saving}}">保存</button>
+  </view>
+</view>

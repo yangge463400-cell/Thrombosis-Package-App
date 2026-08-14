@@ -1,0 +1,63 @@
+<view class="home-page">
+  <nav-bar title="血栓检测服务"></nav-bar>
+
+  <!-- 搜索栏 -->
+  <view class="search-bar" bindtap="goPackageList">
+    <text class="search-icon">⌕</text>
+    <text class="search-ph">搜索检测套餐</text>
+  </view>
+
+  <!-- Banner 轮播 -->
+  <swiper class="banner" indicator-dots autoplay circular interval="4000" indicator-active-color="#1677FF">
+    <swiper-item wx:for="{{banners}}" wx:key="id" bindtap="onBannerTap" data-item="{{item}}">
+      <image class="banner-img" src="{{item.image}}" mode="aspectFill"></image>
+    </swiper-item>
+  </swiper>
+
+  <!-- 8 宫格 -->
+  <view class="grid card">
+    <view class="grid-item" wx:for="{{grids}}" wx:key="key" bindtap="onGridTap" data-key="{{item.key}}">
+      <view class="grid-icon {{item.bg}}">
+        <text>{{item.icon}}</text>
+        <view wx:if="{{item.key === 'messages' && unreadCount > 0}}" class="grid-badge">{{unreadCount > 99 ? '99+' : unreadCount}}</view>
+      </view>
+      <text class="grid-text">{{item.text}}</text>
+    </view>
+  </view>
+
+  <!-- 进行中订单卡 -->
+  <view wx:if="{{ongoingOrder}}" class="card ongoing-card mt-3" bindtap="goOrderDetail" data-id="{{ongoingOrder.id}}">
+    <view class="ongoing-head">
+      <text class="ongoing-title">进行中订单</text>
+      <tag text="{{ongoingOrder.statusText}}" type="{{ongoingOrder.statusType}}"></tag>
+    </view>
+    <view class="ongoing-body">
+      <text class="ongoing-name">{{ongoingOrder.packageName}}</text>
+      <price-display value="{{ongoingOrder.payAmount}}" size="normal" color="danger"></price-display>
+    </view>
+    <view class="ongoing-actions" catchtap="noop">
+      <button wx:if="{{ongoingOrder.status === 'pending_pay'}}" class="btn btn-primary ongoing-btn" catchtap="goPay" data-id="{{ongoingOrder.id}}">去支付</button>
+      <button wx:if="{{ongoingOrder.status === 'paid'}}" class="btn btn-primary ongoing-btn" catchtap="goVerifyCode" data-id="{{ongoingOrder.id}}">查看核销码</button>
+    </view>
+  </view>
+
+  <!-- 推荐套餐 -->
+  <view class="recommend mt-4">
+    <view class="recommend-head">
+      <text class="t-card-title">推荐套餐</text>
+      <text class="recommend-more" bindtap="goPackageList">更多 ›</text>
+    </view>
+    <scroll-view scroll-x class="recommend-scroll" show-scrollbar="{{false}}">
+      <view class="rec-card" wx:for="{{recommendPackages}}" wx:key="id" bindtap="goPackageDetail" data-id="{{item.id}}">
+        <image class="rec-img" src="{{item.cover}}" mode="aspectFill"></image>
+        <view class="rec-name">{{item.name}}</view>
+        <view class="rec-bottom">
+          <price-display value="{{item.price}}" size="normal" color="danger"></price-display>
+          <text class="rec-sales">已售{{item.salesCount || 0}}</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view style="height: 40rpx;"></view>
+</view>

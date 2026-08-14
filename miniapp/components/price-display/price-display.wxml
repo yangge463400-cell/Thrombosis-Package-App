@@ -1,0 +1,3 @@
+<view class="price {{size === 'big' ? 'p-big' : 'p-normal'}} {{color === 'danger' ? 'c-danger' : 'c-normal'}}">
+  <text class="symbol">¥</text><text class="value">{{display}}</text>
+</view>

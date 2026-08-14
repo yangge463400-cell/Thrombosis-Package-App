@@ -1,0 +1,24 @@
+# ============================================================
+# 生产配置占位：通过环境变量注入，勿提交真实密钥
+# ============================================================
+spring:
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/${MYSQL_DB:thrombosis}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=true&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+thrombosis:
+  jwt:
+    secret: ${JWT_SECRET:}
+    expire-hours: ${JWT_EXPIRE_HOURS:168}
+  wechat:
+    appid: ${WX_APPID:}
+    secret: ${WX_SECRET:}
+    mch-id: ${WX_MCH_ID:}
+    notify-url: ${WX_NOTIFY_URL:}
+  dev:
+    mock:
+      verify-code: ""
+      openid-prefix: ""
+      payment: false

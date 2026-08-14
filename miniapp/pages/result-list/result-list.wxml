@@ -1,0 +1,23 @@
+<view class="rl-page">
+  <nav-bar title="检测记录" showBack></nav-bar>
+
+  <view class="rl-list">
+    <view class="card rl-card" wx:for="{{list}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}">
+      <view class="rl-head">
+        <text class="rl-pkg">{{item.packageName}}</text>
+        <tag text="{{item.statusText}}" type="{{item.statusType}}"></tag>
+      </view>
+      <view class="rl-row">
+        <text class="rl-label">检测日期</text>
+        <text class="rl-value">{{item.createdAt}}</text>
+      </view>
+      <view wx:if="{{item.hospitalName}}" class="rl-row">
+        <text class="rl-label">医院</text>
+        <text class="rl-value">{{item.hospitalName}}</text>
+      </view>
+    </view>
+  </view>
+
+  <empty-state wx:if="{{!loading && list.length === 0}}" text="暂无检测记录" btnText="去购买套餐" bindaction="goPackage"></empty-state>
+  <view style="height: 40rpx;"></view>
+</view>

@@ -1,0 +1,8 @@
+.rl-page { min-height: 100vh; background: #F5F7FA; }
+.rl-list { padding: 24rpx 32rpx 0; }
+.rl-card { margin-bottom: 24rpx; }
+.rl-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16rpx; }
+.rl-pkg { font-size: 40rpx; font-weight: bold; color: #1F3A5F; }
+.rl-row { display: flex; align-items: center; margin-top: 12rpx; }
+.rl-label { font-size: 32rpx; color: #999999; width: 160rpx; }
+.rl-value { font-size: 32rpx; color: #333333; }

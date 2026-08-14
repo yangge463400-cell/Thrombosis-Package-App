@@ -1,0 +1,13 @@
+<view class="pkg-card" catchtap="onTap">
+  <image class="pkg-cover" src="{{pkg.cover}}" mode="aspectFill"></image>
+  <view class="pkg-info">
+    <view class="pkg-name">{{pkg.name}}</view>
+    <view class="pkg-tags">
+      <tag wx:for="{{itemNames}}" wx:key="*this" text="{{item}}" type="primary"></tag>
+    </view>
+    <view class="pkg-meta">
+      <price-display value="{{pkg.price}}" size="normal" color="danger"></price-display>
+      <text class="pkg-meta-text">{{pkg.hospitalCount || 0}}家医院 · 已售{{pkg.salesCount || 0}}</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,20 @@
+/* 与小程序 design-tokens 一致的主题变量 */
+:root {
+  --primary: #1677FF;
+  --success: #52C41A;
+  --danger: #FF4D4F;
+  --warning: #FAAD14;
+  --bg: #F5F7FA;
+  --card: #FFFFFF;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-tertiary: #999999;
+  --text-heading: #1F3A5F;
+  --border: #EEF1F6;
+  --primary-bg: #E8F3FF;
+  --success-bg: #F0F5EB;
+  --warning-bg: #FFF7E6;
+  --danger-bg: #FFF1F0;
+  --warning-text: #AD6800;
+  --disabled: #C0C8D4;
+}

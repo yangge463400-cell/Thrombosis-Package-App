@@ -1,0 +1,55 @@
+<view class="login-page">
+  <!-- 顶部品牌区 -->
+  <view class="brand">
+    <view class="brand-logo">
+      <image src="/images/placeholder/logo.png" mode="aspectFit"></image>
+    </view>
+    <view class="brand-name">血栓检测服务</view>
+    <view class="brand-slogan">血管健康管理 · 专业检测服务</view>
+  </view>
+
+  <!-- 身份切换（单 AppID 分流） -->
+  <view class="role-switch">
+    <view class="role-item {{role === 'user' ? 'role-active' : ''}}" bindtap="switchRole" data-role="user">用户登录</view>
+    <view class="role-item {{role === 'staff' ? 'role-active' : ''}}" bindtap="switchRole" data-role="staff">医护登录</view>
+  </view>
+
+  <!-- 用户登录 -->
+  <block wx:if="{{role === 'user'}}">
+    <view class="form-card">
+      <view class="agree-row">
+        <view class="agree-box {{agreed ? 'agree-checked' : ''}}" bindtap="toggleAgree">
+          <text wx:if="{{agreed}}" class="agree-mark">✓</text>
+        </view>
+        <text class="agree-text">我已阅读并同意</text>
+        <text class="agree-link">《用户协议》</text>
+        <text class="agree-text">和</text>
+        <text class="agree-link">《隐私政策》</text>
+      </view>
+      <button class="btn btn-primary login-btn" bindtap="onWechatLogin" loading="{{loading}}">微信一键登录</button>
+      <text class="login-tip">未注册的手机号登录后将自动创建账号</text>
+    </view>
+
+    <!-- 异常态（条件展示） -->
+    <view wx:if="{{authError}}" class="error-card">
+      <text class="error-text">未授权无法使用小程序</text>
+      <button class="btn btn-outline retry-btn" bindtap="onWechatLogin">重新授权</button>
+    </view>
+  </block>
+
+  <!-- 医护登录 -->
+  <block wx:else>
+    <view class="form-card">
+      <view class="input-wrap mt-3">
+        <input class="input" type="number" maxlength="11" placeholder="手机号" placeholder-class="input-ph"
+               value="{{staffPhone}}" bindinput="onStaffPhone" />
+      </view>
+      <view class="input-wrap mt-3">
+        <input class="input" password placeholder="密码" placeholder-class="input-ph"
+               value="{{staffPassword}}" bindinput="onStaffPassword" />
+      </view>
+      <button class="btn btn-primary login-btn mt-4" bindtap="onStaffLogin" loading="{{loading}}">登录</button>
+      <text class="login-tip">医护账号由医院管理员分配，默认测试账号 13800000000 / 123456</text>
+    </view>
+  </block>
+</view>

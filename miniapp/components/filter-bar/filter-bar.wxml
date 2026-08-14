@@ -1,0 +1,43 @@
+<view class="fb">
+  <view class="fb-tabs">
+    <view class="fb-tab {{activeTab === 0 ? 'fb-active' : ''}}" bindtap="switchTab" data-index="0">
+      <text>{{cityText}}</text><text class="fb-arrow">▾</text>
+    </view>
+    <view class="fb-tab {{activeTab === 1 ? 'fb-active' : ''}}" bindtap="switchTab" data-index="1">
+      <text>{{itemText}}</text><text class="fb-arrow">▾</text>
+    </view>
+    <view class="fb-tab {{activeTab === 2 ? 'fb-active' : ''}}" bindtap="switchTab" data-index="2">
+      <text>{{sortText}}</text><text class="fb-arrow">▾</text>
+    </view>
+  </view>
+
+  <!-- 筛选面板 -->
+  <view wx:if="{{activeTab !== -1}}" class="fb-mask" bindtap="close"></view>
+  <view wx:if="{{activeTab === 0}}" class="fb-panel">
+    <scroll-view scroll-y class="fb-list">
+      <view class="fb-option {{!city ? 'fb-option-active' : ''}}"
+            bindtap="selectCity" data-city="">全部地区</view>
+      <view wx:for="{{cities}}" wx:key="*this"
+            class="fb-option {{city === item ? 'fb-option-active' : ''}}"
+            bindtap="selectCity" data-city="{{item}}">{{item}}</view>
+    </scroll-view>
+  </view>
+  <view wx:if="{{activeTab === 1}}" class="fb-panel">
+    <scroll-view scroll-y class="fb-list">
+      <view wx:for="{{items}}" wx:key="id"
+            class="fb-option {{checkedItems.indexOf(item.name) > -1 ? 'fb-option-active' : ''}}"
+            bindtap="toggleItem" data-name="{{item.name}}">{{item.name}}</view>
+    </scroll-view>
+    <view class="fb-actions">
+      <button class="btn btn-plain fb-btn" bindtap="clearItems">清空</button>
+      <button class="btn btn-primary fb-btn" bindtap="confirmItems">确定</button>
+    </view>
+  </view>
+  <view wx:if="{{activeTab === 2}}" class="fb-panel">
+    <scroll-view scroll-y class="fb-list">
+      <view wx:for="{{sorts}}" wx:key="key"
+            class="fb-option {{sort === item.key ? 'fb-option-active' : ''}}"
+            bindtap="selectSort" data-key="{{item.key}}" data-text="{{item.text}}">{{item.text}}</view>
+    </scroll-view>
+  </view>
+</view>

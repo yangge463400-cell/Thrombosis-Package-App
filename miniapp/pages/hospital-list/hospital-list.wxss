@@ -1,0 +1,49 @@
+.hl-page { min-height: 100vh; background: #F5F7FA; }
+.hl-city {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 104rpx;
+  padding: 0 32rpx;
+  background: #FFFFFF;
+}
+.hl-city-current { display: flex; align-items: center; }
+.hl-loc-icon { font-size: 36rpx; color: #1677FF; margin-right: 8rpx; }
+.hl-city-text { font-size: 36rpx; font-weight: 600; color: #333333; }
+.hl-arrow { font-size: 28rpx; color: #666666; margin-left: 8rpx; }
+.hl-city-tip { font-size: 28rpx; color: #999999; }
+
+.city-mask {
+  position: fixed;
+  left: 0; right: 0; top: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 30;
+}
+.city-panel {
+  position: fixed;
+  left: 0; right: 0;
+  bottom: 0;
+  background: #FFFFFF;
+  border-radius: 32rpx 32rpx 0 0;
+  z-index: 31;
+  max-height: 560rpx;
+}
+.city-list { padding: 16rpx 32rpx; max-height: 480rpx; }
+.city-item {
+  min-height: 96rpx;
+  display: flex;
+  align-items: center;
+  font-size: 34rpx;
+  color: #333333;
+  border-bottom: 1rpx solid #EEF1F6;
+}
+.city-active { color: #1677FF; font-weight: 600; }
+
+.hl-list { padding: 24rpx 32rpx 0; }
+.hl-card { margin-bottom: 24rpx; }
+.hl-name { font-size: 40rpx; font-weight: bold; color: #1F3A5F; margin-bottom: 16rpx; }
+.hl-info-row { display: flex; align-items: flex-start; margin-top: 12rpx; }
+.hl-info-label { font-size: 32rpx; color: #999999; width: 140rpx; flex-shrink: 0; }
+.hl-info-value { flex: 1; font-size: 32rpx; color: #333333; line-height: 1.5; }
+.hl-actions { display: flex; gap: 24rpx; margin-top: 24rpx; }
+.hl-btn { flex: 1; }

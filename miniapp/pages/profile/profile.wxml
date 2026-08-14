@@ -1,0 +1,46 @@
+<view class="pf-page">
+  <nav-bar title="我的"></nav-bar>
+
+  <!-- 用户卡 -->
+  <view class="pf-user">
+    <view class="pf-avatar-wrap">
+      <image wx:if="{{user.avatar}}" class="pf-avatar" src="{{user.avatar}}"></image>
+      <view wx:else class="pf-avatar pf-avatar-default">{{user.nickname ? user.nickname[0] : '用'}}</view>
+    </view>
+    <view class="pf-user-info">
+      <text class="pf-nickname">{{user.nickname || '微信用户'}}</text>
+      <text class="pf-phone">{{user.phone || '未绑定手机号'}}</text>
+    </view>
+  </view>
+
+  <!-- 档案卡 -->
+  <view class="card pf-profile mt-3" bindtap="goProfileEdit">
+    <view class="pf-profile-head">
+      <text class="t-card-title">个人档案</text>
+      <text class="pf-edit">编辑 ›</text>
+    </view>
+    <view class="pf-profile-items">
+      <view class="pf-p-item"><text class="pf-p-label">性别</text><text class="pf-p-value">{{genderText}}</text></view>
+      <view class="pf-p-item"><text class="pf-p-label">年龄</text><text class="pf-p-value">{{user.age ? user.age + ' 岁' : '未填写'}}</text></view>
+      <view class="pf-p-item"><text class="pf-p-label">身高</text><text class="pf-p-value">{{user.height ? user.height + ' cm' : '未填写'}}</text></view>
+      <view class="pf-p-item"><text class="pf-p-label">体重</text><text class="pf-p-value">{{user.weight ? user.weight + ' kg' : '未填写'}}</text></view>
+    </view>
+  </view>
+
+  <!-- 功能列表 -->
+  <view class="card pf-menu mt-3">
+    <view class="cell" bindtap="goOrders"><text class="cell-label">我的订单</text><text class="cell-arrow">›</text></view>
+    <view class="cell" bindtap="goResults"><text class="cell-label">检测记录</text><text class="cell-arrow">›</text></view>
+    <view class="cell" bindtap="goMedication"><text class="cell-label">用药管理</text><text class="cell-arrow">›</text></view>
+    <view class="cell" bindtap="goMessages">
+      <text class="cell-label">消息中心</text>
+      <view class="pf-msg-badge" wx:if="{{unreadCount > 0}}">{{unreadCount > 99 ? '99+' : unreadCount}}</view>
+      <text class="cell-arrow">›</text>
+    </view>
+    <view class="cell" bindtap="goHospitals"><text class="cell-label">合作医院</text><text class="cell-arrow">›</text></view>
+    <view class="cell" bindtap="goHelp"><text class="cell-label">帮助与客服</text><text class="cell-arrow">›</text></view>
+    <view class="cell" bindtap="goAbout"><text class="cell-label">关于我们</text><text class="cell-arrow">›</text></view>
+  </view>
+
+  <button class="btn btn-plain pf-logout mt-4" bindtap="onLogout">退出登录</button>
+</view>

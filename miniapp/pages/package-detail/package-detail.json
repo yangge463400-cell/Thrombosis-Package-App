@@ -1,0 +1,10 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "nav-bar": "/components/nav-bar/nav-bar",
+    "tag": "/components/tag/tag",
+    "price-display": "/components/price-display/price-display",
+    "bottom-bar": "/components/bottom-bar/bottom-bar",
+    "empty-state": "/components/empty-state/empty-state"
+  }
+}

@@ -1,0 +1,36 @@
+<view class="scan-page">
+  <nav-bar title="扫码核销" showBack></nav-bar>
+
+  <!-- 扫码框 -->
+  <view class="scan-frame">
+    <view class="scan-corner tl"></view>
+    <view class="scan-corner tr"></view>
+    <view class="scan-corner bl"></view>
+    <view class="scan-corner br"></view>
+    <view class="scan-center">
+      <text class="scan-hint">{{code ? '已识别核销码' : '对准用户出示的核销码'}}</text>
+    </view>
+    <button class="btn btn-primary scan-camera-btn" bindtap="onScan">点击扫码</button>
+  </view>
+
+  <!-- 手动输入 -->
+  <view class="scan-manual">
+    <text class="scan-manual-title">或手动输入核销码</text>
+    <verify-code-input id="vci" length="6" bindinput="onCodeInput" bindcomplete="onCodeComplete"></verify-code-input>
+  </view>
+
+  <!-- 校验结果确认卡 -->
+  <view wx:if="{{checkResult}}" class="card scan-confirm mt-4">
+    <view class="scan-c-head">
+      <text class="scan-c-title">核销确认</text>
+      <text class="scan-c-status">待核销</text>
+    </view>
+    <view class="scan-c-row"><text class="scan-c-label">套餐</text><text class="scan-c-value">{{checkResult.packageName}}</text></view>
+    <view class="scan-c-row"><text class="scan-c-label">用户</text><text class="scan-c-value">{{checkResult.userPhone}}</text></view>
+    <view class="scan-c-row"><text class="scan-c-label">订单号</text><text class="scan-c-value">{{checkResult.orderNo}}</text></view>
+    <view class="scan-c-row"><text class="scan-c-label">支付时间</text><text class="scan-c-value">{{checkResult.payTime}}</text></view>
+    <button class="btn btn-primary scan-confirm-btn mt-4" bindtap="onConfirm" loading="{{confirming}}">确认核销</button>
+  </view>
+
+  <view style="height: 60rpx;"></view>
+</view>

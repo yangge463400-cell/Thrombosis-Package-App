@@ -1,0 +1,7 @@
+.price { display: inline-flex; align-items: baseline; }
+.p-big .value { font-size: 60rpx; font-weight: bold; }
+.p-big .symbol { font-size: 36rpx; font-weight: bold; }
+.p-normal .value { font-size: 36rpx; font-weight: 600; }
+.p-normal .symbol { font-size: 28rpx; }
+.c-danger { color: #FF4D4F; }
+.c-normal { color: #333333; }

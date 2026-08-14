@@ -1,0 +1,29 @@
+<view class="rc-page">
+  <nav-bar title="核销记录" showBack></nav-bar>
+
+  <!-- 日期筛选 -->
+  <view class="rc-filter">
+    <picker mode="date" value="{{date}}" bindchange="onDateChange">
+      <view class="rc-date-picker">
+        <text class="rc-date-text">{{date || '全部日期'}}</text>
+        <text class="rc-arrow">▾</text>
+      </view>
+    </picker>
+    <text wx:if="{{date}}" class="rc-clear" bindtap="clearDate">清除</text>
+  </view>
+
+  <view class="rc-list">
+    <view class="card rc-card" wx:for="{{list}}" wx:key="id">
+      <view class="rc-head">
+        <text class="rc-pkg">{{item.packageName}}</text>
+        <text class="rc-time">{{item.verifyTime}}</text>
+      </view>
+      <view class="rc-row"><text class="rc-label">核销码</text><text class="rc-value">{{item.code}}</text></view>
+      <view class="rc-row"><text class="rc-label">用户</text><text class="rc-value">{{item.userPhone}}</text></view>
+      <view class="rc-row"><text class="rc-label">核销人</text><text class="rc-value">ID {{item.staffId}}</text></view>
+    </view>
+  </view>
+
+  <empty-state wx:if="{{!loading && list.length === 0}}" text="暂无核销记录"></empty-state>
+  <view style="height: 40rpx;"></view>
+</view>

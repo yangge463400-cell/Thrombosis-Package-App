@@ -1,0 +1,37 @@
+.ru-page { min-height: 100vh; background: #F5F7FA; }
+.ru-form { margin: 24rpx 32rpx 0; }
+.ru-row { display: flex; align-items: center; min-height: 104rpx; border-bottom: 1rpx solid #EEF1F6; }
+.ru-row:last-child { border-bottom: none; }
+.ru-label { font-size: 34rpx; color: #333333; width: 160rpx; flex-shrink: 0; }
+.ru-input { flex: 1; font-size: 34rpx; }
+.ru-query { flex-shrink: 0; margin-left: 16rpx; height: 64rpx; line-height: 64rpx; font-size: 32rpx; }
+
+.ru-order {
+  background: #E8F3FF;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-top: 20rpx;
+}
+.ru-order-name { display: block; font-size: 36rpx; font-weight: bold; color: #1F3A5F; }
+.ru-order-no, .ru-order-phone { display: block; font-size: 32rpx; color: #666666; margin-top: 8rpx; }
+
+.ru-radio-group { display: flex; gap: 24rpx; flex: 1; }
+.ru-radio {
+  min-width: 160rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34rpx;
+  color: #666666;
+  background: #F5F7FA;
+  border-radius: 40rpx;
+}
+.ru-radio-active { background: #E8F3FF; color: #1677FF; font-weight: 600; }
+
+.ru-note {
+  padding: 16rpx 0 8rpx;
+  font-size: 28rpx;
+  color: #999999;
+}
+.ru-submit { margin: 24rpx 32rpx 0; width: calc(100% - 64rpx); }

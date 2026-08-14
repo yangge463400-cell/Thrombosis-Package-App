@@ -1,0 +1,13 @@
+<view class="mi {{item.isRead === 0 ? 'mi-unread' : ''}}" catchtap="onTap" catchlongpress="onLongPress">
+  <view class="mi-icon mi-icon-{{item.type}}">
+    <text>{{typeChar}}</text>
+  </view>
+  <view class="mi-body">
+    <view class="mi-title-row">
+      <text class="mi-title">{{item.title}}</text>
+      <view wx:if="{{item.isRead === 0}}" class="mi-dot"></view>
+    </view>
+    <text class="mi-desc">{{item.content}}</text>
+    <text class="mi-time">{{item.createdAt}}</text>
+  </view>
+</view>

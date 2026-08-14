@@ -1,0 +1,66 @@
+<view class="od-page">
+  <nav-bar title="订单详情" showBack></nav-bar>
+
+  <block wx:if="{{order}}">
+    <!-- 状态卡 -->
+    <view class="od-status-card">
+      <text class="od-status-title">{{statusTitle}}</text>
+      <text class="od-status-desc">{{statusDesc}}</text>
+      <view class="od-steps-wrap">
+        <order-status-steps steps="{{steps}}" current="{{stepCurrent}}"></order-status-steps>
+      </view>
+    </view>
+
+    <!-- 核销码卡（已支付后显示） -->
+    <view wx:if="{{order.verifyCode}}" class="card od-code-card mt-3">
+      <view class="od-code-head" bindtap="toggleMode">
+        <text class="od-code-title">核销码</text>
+        <text class="od-code-toggle">{{qrMode ? '查看数字' : '出示二维码'}}</text>
+      </view>
+
+      <!-- 数字模式（默认） -->
+      <view wx:if="{{!qrMode}}" bindtap="toggleCode" class="od-code-block">
+        <view class="od-code-num">
+          <text wx:if="{{codeHidden}}">******</text>
+          <text wx:else>{{order.verifyCode}}</text>
+        </view>
+        <text class="od-code-tip">到医院出示，医护扫码核销 · 支付后长期有效</text>
+      </view>
+
+      <!-- 二维码模式 -->
+      <view wx:else class="od-qr-block">
+        <image class="od-qr-img" src="{{qrcodeUrl}}" mode="aspectFit" show-menu-by-longpress="true"></image>
+        <text class="od-code-tip">让医护用微信「扫一扫」对准本二维码即可核销</text>
+      </view>
+    </view>
+
+    <!-- 套餐信息 -->
+    <view class="card mt-3">
+      <view class="od-row">
+        <image class="od-cover" src="{{order.cover}}" mode="aspectFill"></image>
+        <view class="od-pkg-info">
+          <text class="od-pkg-name">{{order.packageName}}</text>
+          <view class="od-pkg-price">
+            <price-display value="{{order.payAmount}}" size="normal" color="danger"></price-display>
+          </view>
+        </view>
+      </view>
+      <view class="od-divider"></view>
+      <view class="od-info-row"><text class="od-info-label">订单编号</text><text class="od-info-value">{{order.orderNo}}</text></view>
+      <view class="od-info-row"><text class="od-info-label">下单时间</text><text class="od-info-value">{{order.createdAt}}</text></view>
+      <view class="od-info-row"><text class="od-info-label">支付方式</text><text class="od-info-value">{{payChannelText}}</text></view>
+      <view class="od-info-row"><text class="od-info-label">支付金额</text><text class="od-info-value">¥{{order.payAmount}}</text></view>
+      <view wx:if="{{order.hospitalName}}" class="od-info-row"><text class="od-info-label">核销医院</text><text class="od-info-value">{{order.hospitalName}}</text></view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="od-actions mt-4">
+      <button wx:if="{{order.status === 'pending_pay'}}" class="btn btn-plain od-btn" bindtap="onCancel">取消订单</button>
+      <button wx:if="{{order.status === 'pending_pay'}}" class="btn btn-primary od-btn" bindtap="onPay">去支付</button>
+      <button wx:if="{{order.status === 'paid'}}" class="btn btn-primary od-btn" bindtap="goHospital">前往检测</button>
+      <button wx:if="{{order.status === 'completed'}}" class="btn btn-primary od-btn" bindtap="goResult">查看检测结果</button>
+    </view>
+  </block>
+
+  <view style="height: 60rpx;"></view>
+</view>

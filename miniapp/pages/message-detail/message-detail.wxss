@@ -1,0 +1,17 @@
+.mdt-page { min-height: 100vh; background: #F5F7FA; }
+.mdt-head { padding: 8rpx 8rpx 24rpx; }
+.mdt-title {
+  display: block;
+  font-size: 44rpx;
+  font-weight: bold;
+  color: #1F3A5F;
+  line-height: 1.4;
+}
+.mdt-time { display: block; font-size: 28rpx; color: #999999; margin-top: 12rpx; }
+.mdt-body { padding: 40rpx 32rpx; }
+.mdt-content {
+  font-size: 36rpx;
+  color: #333333;
+  line-height: 1.8;
+}
+.mdt-action { width: 100%; }

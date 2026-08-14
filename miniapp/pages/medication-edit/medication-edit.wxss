@@ -1,0 +1,64 @@
+.me-page { min-height: 100vh; background: #F5F7FA; }
+.me-chips { display: flex; flex-wrap: wrap; gap: 16rpx; }
+.me-chip {
+  min-height: 88rpx;
+  display: flex;
+  align-items: center;
+  padding: 0 32rpx;
+  font-size: 32rpx;
+  color: #666666;
+  background: #F2F4F7;
+  border-radius: 44rpx;
+  box-sizing: border-box;
+}
+.me-chip-active {
+  background: #E8F3FF;
+  color: #1677FF;
+  font-weight: 600;
+}
+.me-dose-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 88rpx;
+}
+.me-label { font-size: 34rpx; color: #333333; }
+.me-dose-input {
+  display: flex;
+  align-items: center;
+  background: #F5F7FA;
+  border-radius: 24rpx;
+  height: 88rpx;
+  padding: 0 24rpx;
+  box-sizing: border-box;
+  width: 360rpx;
+}
+.me-unit {
+  font-size: 32rpx;
+  color: #1677FF;
+  margin-left: 16rpx;
+}
+.me-time-head { display: flex; align-items: center; justify-content: space-between; }
+.me-add-time { font-size: 32rpx; color: #1677FF; }
+.me-time-item {
+  display: flex;
+  align-items: center;
+  min-height: 104rpx;
+  border-bottom: 1rpx solid #EEF1F6;
+}
+.me-time-picker {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #1677FF;
+  min-width: 200rpx;
+}
+.me-time-label { flex: 1; font-size: 32rpx; color: #666666; margin-left: 24rpx; }
+.me-del-time { font-size: 30rpx; color: #FF4D4F; }
+.me-remind {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.me-remind-title { display: block; font-size: 36rpx; color: #333333; font-weight: 600; }
+.me-remind-desc { display: block; font-size: 28rpx; color: #999999; margin-top: 8rpx; }
+.me-save { width: 100%; }

@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "tag": "../tag/tag",
+    "price-display": "../price-display/price-display"
+  }
+}

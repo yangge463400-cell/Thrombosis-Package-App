@@ -1,0 +1,18 @@
+.bottom-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 120rpx;
+  padding: 12rpx 32rpx;
+  background: #FFFFFF;
+  box-shadow: 0 -4rpx 16rpx rgba(10, 30, 60, 0.06);
+  box-sizing: content-box;
+  z-index: 100;
+}
+.bb-label { font-size: 32rpx; color: #666666; }
+.bb-price { font-size: 60rpx; font-weight: bold; color: #FF4D4F; }
+.bb-btn-wrap { display: flex; align-items: center; }

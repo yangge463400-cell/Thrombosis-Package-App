@@ -1,0 +1,9 @@
+{
+  "navigationStyle": "custom",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "nav-bar": "/components/nav-bar/nav-bar",
+    "tag": "/components/tag/tag",
+    "empty-state": "/components/empty-state/empty-state"
+  }
+}

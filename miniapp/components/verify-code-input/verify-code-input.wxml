@@ -1,0 +1,7 @@
+<view class="vci" bindtap="focusInput">
+  <view wx:for="{{cells}}" wx:key="index" class="vci-cell {{item ? 'vci-filled' : ''}}">
+    <text>{{item}}</text>
+  </view>
+  <input class="vci-hidden" type="number" maxlength="{{length}}" value="{{value}}"
+         focus="{{focus}}" bindinput="onInput" bindblur="onBlur" />
+</view>

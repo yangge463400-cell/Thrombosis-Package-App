@@ -1,0 +1,45 @@
+.pkg-card {
+  display: flex;
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  box-shadow: 0 6rpx 20rpx rgba(10, 30, 60, 0.08);
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+  box-sizing: border-box;
+}
+.pkg-cover {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 16rpx;
+  background: #E8F3FF;
+  flex-shrink: 0;
+}
+.pkg-info {
+  flex: 1;
+  margin-left: 24rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 200rpx;
+}
+.pkg-name {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #1F3A5F;
+  line-height: 1.3;
+}
+.pkg-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin: 12rpx 0;
+}
+.pkg-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.pkg-meta-text {
+  font-size: 28rpx;
+  color: #999999;
+}

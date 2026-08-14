@@ -1,0 +1,58 @@
+.oc-page { min-height: 100vh; background: #F5F7FA; }
+.oc-row { display: flex; }
+.oc-cover { width: 200rpx; height: 200rpx; border-radius: 16rpx; background: #E8F3FF; flex-shrink: 0; }
+.oc-info { flex: 1; margin-left: 24rpx; }
+.oc-name { font-size: 40rpx; font-weight: bold; color: #1F3A5F; line-height: 1.3; }
+.oc-tags { display: flex; flex-wrap: wrap; gap: 12rpx; margin-top: 16rpx; }
+.oc-tag {
+  font-size: 28rpx;
+  color: #1677FF;
+  background: #E8F3FF;
+  padding: 6rpx 20rpx;
+  border-radius: 28rpx;
+}
+.oc-pop { margin-top: 16rpx; }
+.oc-pop-text { font-size: 28rpx; color: #999999; }
+.oc-amount-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 96rpx;
+}
+.oc-label { font-size: 34rpx; color: #666666; }
+.oc-total { border-top: 1rpx solid #EEF1F6; }
+.agree-row { display: flex; align-items: center; }
+.agree-box {
+  width: 44rpx; height: 44rpx; border-radius: 12rpx;
+  border: 2rpx solid #C0C8D4;
+  display: flex; align-items: center; justify-content: center;
+  margin-right: 12rpx;
+}
+.agree-checked { background: #1677FF; border-color: #1677FF; }
+.agree-mark { color: #FFFFFF; font-size: 28rpx; }
+.agree-text { font-size: 28rpx; color: #666666; }
+.agree-link { font-size: 28rpx; color: #1677FF; }
+.oc-notice-tip {
+  display: block;
+  font-size: 28rpx;
+  color: #999999;
+  margin-top: 16rpx;
+}
+.oc-submit { width: 320rpx; }
+
+.oc-hosp-head { display: flex; align-items: baseline; justify-content: space-between; }
+.oc-hosp-label { font-weight: 600; }
+.oc-hosp-tip { font-size: 28rpx; color: #999999; }
+.oc-hosp-list { margin-top: 20rpx; }
+.oc-hosp-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 120rpx;
+  border-bottom: 1rpx solid #EEF1F6;
+  padding: 8rpx 0;
+}
+.oc-hosp-item:last-child { border-bottom: none; }
+.oc-hosp-info { flex: 1; margin-right: 24rpx; }
+.oc-hosp-name { display: block; font-size: 34rpx; color: #333333; font-weight: 600; }
+.oc-hosp-addr { display: block; font-size: 30rpx; color: #999999; margin-top: 8rpx; }

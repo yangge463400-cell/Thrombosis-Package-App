@@ -1,0 +1,74 @@
+<view class="oc-page">
+  <nav-bar title="订单确认" showBack></nav-bar>
+
+  <view class="page">
+    <!-- 套餐信息 -->
+    <view wx:if="{{pkg}}" class="card">
+      <view class="oc-row">
+        <image class="oc-cover" src="{{pkg.cover}}" mode="aspectFill"></image>
+        <view class="oc-info">
+          <text class="oc-name">{{pkg.name}}</text>
+          <view class="oc-tags">
+            <text class="oc-tag" wx:for="{{itemNames}}" wx:key="*this">{{item}}</text>
+          </view>
+          <view class="oc-pop">
+            <text class="oc-pop-text">适用人群：{{popText}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 核销医院选择 -->
+    <view class="card mt-3">
+      <view class="oc-hosp-head">
+        <text class="oc-label oc-hosp-label">核销医院</text>
+        <text class="oc-hosp-tip">核销码将绑定该医院，仅该院医护可核销</text>
+      </view>
+      <radio-group class="oc-hosp-list" bindchange="onHospitalChange">
+        <label class="oc-hosp-item" wx:for="{{hospitals}}" wx:key="id">
+          <view class="oc-hosp-info">
+            <text class="oc-hosp-name">{{item.name}}</text>
+            <text class="oc-hosp-addr">{{item.address}}</text>
+          </view>
+          <radio value="{{item.id}}" checked="{{item.id === hospitalId}}" color="#1677FF" />
+        </label>
+      </radio-group>
+    </view>
+
+    <!-- 金额明细 -->
+    <view class="card mt-3">
+      <view class="oc-amount-row">
+        <text class="oc-label">套餐原价</text>
+        <price-display value="{{pkg.price}}" size="normal" color="normal"></price-display>
+      </view>
+      <view class="oc-amount-row">
+        <text class="oc-label">优惠</text>
+        <text class="oc-label">- ¥0.00</text>
+      </view>
+      <view class="oc-amount-row oc-total">
+        <text class="oc-label">应付总额</text>
+        <price-display value="{{pkg.price}}" size="big" color="danger"></price-display>
+      </view>
+    </view>
+
+    <!-- 知情同意 -->
+    <view class="card mt-3">
+      <view class="agree-row">
+        <view class="agree-box {{agreed ? 'agree-checked' : ''}}" bindtap="toggleAgree">
+          <text wx:if="{{agreed}}" class="agree-mark">✓</text>
+        </view>
+        <text class="agree-text">我已阅读并同意</text>
+        <text class="agree-link" catchtap="showNotice">《检测服务知情同意书》</text>
+      </view>
+      <text class="oc-notice-tip">检测结果仅用于健康管理参考，不构成医疗诊断</text>
+    </view>
+
+    <view style="height: 200rpx;"></view>
+
+    <bottom-bar price="{{pkg.price}}">
+      <view slot="buttons">
+        <button class="btn btn-primary oc-submit" bindtap="onSubmit" loading="{{submitting}}">提交订单</button>
+      </view>
+    </bottom-bar>
+  </view>
+</view>

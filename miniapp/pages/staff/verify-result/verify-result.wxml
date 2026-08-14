@@ -1,0 +1,31 @@
+<view class="vr-page">
+  <nav-bar title="核销结果" showBack="{{false}}"></nav-bar>
+
+  <!-- 成功态 -->
+  <block wx:if="{{ok}}">
+    <view class="vr-result">
+      <view class="vr-icon vr-ok">✓</view>
+      <text class="vr-title">核销成功</text>
+      <text class="vr-sub">{{packageName}}</text>
+    </view>
+    <view class="card vr-info mt-4">
+      <view class="vr-row"><text class="vr-label">核销码</text><text class="vr-value">{{code}}</text></view>
+      <view class="vr-row"><text class="vr-label">用户</text><text class="vr-value">{{phone}}</text></view>
+      <view class="vr-row"><text class="vr-label">核销时间</text><text class="vr-value">{{time}}</text></view>
+    </view>
+    <button class="btn btn-primary vr-btn mt-4" bindtap="goHome">完成</button>
+  </block>
+
+  <!-- 失败态 -->
+  <block wx:else>
+    <view class="vr-result">
+      <view class="vr-icon vr-fail">✗</view>
+      <text class="vr-title">核销失败</text>
+      <text class="vr-sub">{{failReason}}</text>
+    </view>
+    <view class="vr-actions mt-4">
+      <button class="btn btn-plain vr-btn" bindtap="goScan">重新核销</button>
+      <button class="btn btn-primary vr-btn" bindtap="goManual">手动输入</button>
+    </view>
+  </block>
+</view>

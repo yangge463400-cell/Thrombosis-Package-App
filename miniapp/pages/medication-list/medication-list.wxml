@@ -1,0 +1,47 @@
+<view class="ml-page">
+  <nav-bar title="用药管理" showBack rightText="＋" bindright="onAdd"></nav-bar>
+
+  <!-- 医生评估 banner -->
+  <view class="ml-banner">
+    <view>
+      <text class="ml-banner-title">医生评估：{{assessedText}}</text>
+      <text class="ml-banner-desc">{{assessedDesc}}</text>
+    </view>
+    <button wx:if="{{assessed === 'thrombosis'}}" class="btn btn-primary ml-banner-btn" bindtap="goPackage">抗凝药物效果检测套餐</button>
+  </view>
+
+  <!-- 用药卡片 -->
+  <view class="ml-list">
+    <view class="card ml-card" wx:for="{{list}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}">
+      <view class="ml-head">
+        <text class="ml-drug">{{item.drugName}}</text>
+        <switch checked="{{item.reminderOn === 1}}" color="#1677FF"
+                bindchange="onRemind" data-id="{{item.id}}" catchtap="noop" />
+      </view>
+      <text class="ml-dose">每次 {{item.dosePerTime}} · 每日 {{item.timesPerDay}} 次</text>
+      <view class="ml-times">
+        <text class="ml-time" wx:for="{{item.timePoints}}" wx:key="id">{{item.time}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 今日打卡 -->
+  <block wx:if="{{todayPlan.length}}">
+    <view class="ml-today-head mt-4">
+      <text class="t-card-title">今日打卡</text>
+      <text class="ml-today-count">{{todayDone}}/{{todayPlan.length}} 已服</text>
+    </view>
+    <view class="ml-today">
+      <medication-record-item wx:for="{{todayPlan}}" wx:key="key" item="{{item}}"
+                              bindtap="onCheckIn"></medication-record-item>
+    </view>
+  </block>
+
+  <empty-state wx:if="{{!loading && list.length === 0}}" text="暂无用药记录" btnText="新增用药" bindaction="onAdd"></empty-state>
+  <view style="height: 200rpx;"></view>
+
+  <!-- 底部新增 -->
+  <view class="ml-footer safe-bottom">
+    <button class="btn btn-primary ml-add-btn" bindtap="onAdd">＋ 新增用药</button>
+  </view>
+</view>
