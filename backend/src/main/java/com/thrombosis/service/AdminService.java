@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.thrombosis.common.BusinessException;
 import com.thrombosis.common.ErrorCode;
+import com.thrombosis.dto.AccountVO;
+import com.thrombosis.dto.AdminUserSaveRequest;
 import com.thrombosis.dto.PageResult;
 import com.thrombosis.entity.Hospital;
 import com.thrombosis.entity.Orders;
@@ -18,6 +20,7 @@ import com.thrombosis.mapper.PayBillMapper;
 import com.thrombosis.mapper.UserMapper;
 import com.thrombosis.mapper.VerifyRecordMapper;
 import com.thrombosis.security.JwtUtil;
+import com.thrombosis.security.UserContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -56,7 +59,250 @@ public class AdminService {
         r.put("nickname", u.getNickname());
         r.put("role", u.getRole());
         r.put("hospitalId", u.getHospitalId());
+        // 医院管理员：从数据库关联返回医院名称（前端顶部展示，非写死）
+        r.put("hospitalName", hospitalNameOf(u.getHospitalId()));
         return r;
+    }
+
+    // ---------- 当前账号信息（含所属医院名称） ----------
+    public Map<String, Object> me(String role, Long userId, Long hospitalId) {
+        User u = userMapper.selectById(userId);
+        if (u == null) {
+            throw new BusinessException(ErrorCode.UNAUTHORIZED, "账号不存在");
+        }
+        Map<String, Object> r = new HashMap<>();
+        r.put("userId", u.getId());
+        r.put("nickname", u.getNickname());
+        r.put("role", u.getRole());
+        r.put("hospitalId", u.getHospitalId());
+        r.put("hospitalName", hospitalNameOf(u.getHospitalId()));
+        return r;
+    }
+
+    /** 关联查询医院名称；无医院或不存在返回 null */
+    private String hospitalNameOf(Long hospitalId) {
+        if (hospitalId == null) return null;
+        Hospital h = hospitalMapper.selectById(hospitalId);
+        return h == null ? null : h.getName();
+    }
+
+    /** 多租户数据隔离核心：计算实际生效的 hospitalId。
+     *  hospital_admin 一律锁定当前账号所属医院，忽略前端传入值，杜绝越权；
+     *  admin 使用前端显式指定的 hospitalId（可为 null = 全量）。 */
+    private Long resolveHospitalId(String role, Long reqHospitalId) {
+        if ("hospital_admin".equals(role)) {
+            Long hid = UserContext.get() == null ? null : UserContext.get().getHospitalId();
+            if (hid == null) {
+                throw new BusinessException(ErrorCode.FORBIDDEN, "账号未绑定医院，无法操作");
+            }
+            return hid;
+        }
+        return reqHospitalId;
+    }
+
+    /** User -> AccountVO（附带医院名称） */
+    private AccountVO toAccountVO(User u) {
+        if (u == null) return null;
+        AccountVO vo = new AccountVO();
+        vo.setId(u.getId());
+        vo.setPhone(u.getPhone());
+        vo.setNickname(u.getNickname());
+        vo.setRole(u.getRole());
+        vo.setHospitalId(u.getHospitalId());
+        vo.setHospitalName(hospitalNameOf(u.getHospitalId()));
+        vo.setStatus(u.getStatus());
+        vo.setCreatedAt(u.getCreatedAt());
+        return vo;
+    }
+
+    // ---------- 医护管理（医院端：锁本院；平台端：可全量/按医院） ----------
+    public PageResult<AccountVO> staffs(String role, Long reqHospitalId, String keyword,
+                                        int page, int pageSize) {
+        Long effHid = resolveHospitalId(role, reqHospitalId);
+        LambdaQueryWrapper<User> qw = new LambdaQueryWrapper<User>()
+                .eq(User::getRole, "staff")
+                .orderByDesc(User::getId);
+        if (effHid != null) qw.eq(User::getHospitalId, effHid);
+        if (keyword != null && !keyword.isBlank()) {
+            qw.and(w -> w.like(User::getPhone, keyword).or().like(User::getNickname, keyword));
+        }
+        Page<User> p = new Page<>(page, pageSize);
+        userMapper.selectPage(p, qw);
+        List<AccountVO> list = p.getRecords().stream().map(this::toAccountVO).toList();
+        return PageResult.of(list, p.getTotal(), page, pageSize);
+    }
+
+    @Transactional
+    public AccountVO createStaff(String role, AdminUserSaveRequest req) {
+        // 账号查重
+        checkPhoneUnique(req.getPhone(), null);
+        // 强制校验密码
+        if (req.getPassword() == null || req.getPassword().isBlank()) {
+            throw new BusinessException(ErrorCode.SERVER_ERROR, "请输入初始密码");
+        }
+        // 医院管理员只能给本院新增医护；平台管理员必须显式指定医院
+        Long effHid = resolveHospitalId(role, req.getHospitalId());
+        if (effHid == null) {
+            throw new BusinessException(ErrorCode.SERVER_ERROR, "请选择所属医院");
+        }
+        User u = new User();
+        u.setPhone(req.getPhone());
+        u.setPassword(new BCryptPasswordEncoder().encode(req.getPassword()));
+        u.setNickname(req.getNickname() == null || req.getNickname().isBlank() ? "医护" : req.getNickname());
+        u.setRole("staff");
+        u.setHospitalId(effHid);
+        u.setStatus(req.getStatus() == null ? 1 : req.getStatus());
+        u.setCreatedAt(LocalDateTime.now());
+        userMapper.insert(u);
+        return toAccountVO(u);
+    }
+
+    @Transactional
+    public AccountVO updateStaff(String role, Long id, AdminUserSaveRequest req) {
+        User u = requireAccount(id, "医护");
+        // 数据隔离：医院管理员只能改本院医护
+        assertOwnHospital(role, u);
+        // 修改手机号时查重（排除自身）
+        checkPhoneUnique(req.getPhone(), id);
+        if (req.getPhone() != null && !req.getPhone().isBlank()) u.setPhone(req.getPhone());
+        if (req.getNickname() != null && !req.getNickname().isBlank()) u.setNickname(req.getNickname());
+        if (req.getStatus() != null) u.setStatus(req.getStatus());
+        // 密码：编辑时留空不修改
+        if (req.getPassword() != null && !req.getPassword().isBlank()) {
+            u.setPassword(new BCryptPasswordEncoder().encode(req.getPassword()));
+        }
+        u.setUpdatedAt(LocalDateTime.now());
+        userMapper.updateById(u);
+        return toAccountVO(userMapper.selectById(id));
+    }
+
+    @Transactional
+    public void deleteStaff(String role, Long id) {
+        User u = requireAccount(id, "医护");
+        assertOwnHospital(role, u);
+        userMapper.deleteById(id);
+    }
+
+    @Transactional
+    public void resetStaffPassword(String role, Long id, String newPassword) {
+        if (newPassword == null || newPassword.length() < 6) {
+            throw new BusinessException(ErrorCode.SERVER_ERROR, "新密码长度需在 6-32 位");
+        }
+        User u = requireAccount(id, "医护");
+        assertOwnHospital(role, u);
+        u.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+        u.setUpdatedAt(LocalDateTime.now());
+        userMapper.updateById(u);
+    }
+
+    // ---------- 医院管理员管理（仅平台管理员，新增必须指定医院） ----------
+    public PageResult<AccountVO> hospitalAdmins(String keyword, Long hospitalId, int page, int pageSize) {
+        LambdaQueryWrapper<User> qw = new LambdaQueryWrapper<User>()
+                .eq(User::getRole, "hospital_admin")
+                .orderByDesc(User::getId);
+        if (hospitalId != null) qw.eq(User::getHospitalId, hospitalId);
+        if (keyword != null && !keyword.isBlank()) {
+            qw.and(w -> w.like(User::getPhone, keyword).or().like(User::getNickname, keyword));
+        }
+        Page<User> p = new Page<>(page, pageSize);
+        userMapper.selectPage(p, qw);
+        List<AccountVO> list = p.getRecords().stream().map(this::toAccountVO).toList();
+        return PageResult.of(list, p.getTotal(), page, pageSize);
+    }
+
+    @Transactional
+    public AccountVO createHospitalAdmin(AdminUserSaveRequest req) {
+        if (req.getHospitalId() == null) {
+            throw new BusinessException(ErrorCode.SERVER_ERROR, "请选择所属医院");
+        }
+        if (hospitalMapper.selectById(req.getHospitalId()) == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND, "所选医院不存在");
+        }
+        if (req.getPassword() == null || req.getPassword().isBlank()) {
+            throw new BusinessException(ErrorCode.SERVER_ERROR, "请输入初始密码");
+        }
+        checkPhoneUnique(req.getPhone(), null);
+        User u = new User();
+        u.setPhone(req.getPhone());
+        u.setPassword(new BCryptPasswordEncoder().encode(req.getPassword()));
+        u.setNickname(req.getNickname() == null || req.getNickname().isBlank() ? "医院管理员" : req.getNickname());
+        u.setRole("hospital_admin");
+        u.setHospitalId(req.getHospitalId());
+        u.setStatus(req.getStatus() == null ? 1 : req.getStatus());
+        u.setCreatedAt(LocalDateTime.now());
+        userMapper.insert(u);
+        return toAccountVO(u);
+    }
+
+    @Transactional
+    public AccountVO updateHospitalAdmin(Long id, AdminUserSaveRequest req) {
+        User u = requireAccount(id, "医院管理员");
+        if (req.getHospitalId() != null) {
+            if (hospitalMapper.selectById(req.getHospitalId()) == null) {
+                throw new BusinessException(ErrorCode.NOT_FOUND, "所选医院不存在");
+            }
+            u.setHospitalId(req.getHospitalId());
+        }
+        if (req.getPhone() != null && !req.getPhone().isBlank()) {
+            checkPhoneUnique(req.getPhone(), id);
+            u.setPhone(req.getPhone());
+        }
+        if (req.getNickname() != null && !req.getNickname().isBlank()) u.setNickname(req.getNickname());
+        if (req.getStatus() != null) u.setStatus(req.getStatus());
+        if (req.getPassword() != null && !req.getPassword().isBlank()) {
+            u.setPassword(new BCryptPasswordEncoder().encode(req.getPassword()));
+        }
+        u.setUpdatedAt(LocalDateTime.now());
+        userMapper.updateById(u);
+        return toAccountVO(userMapper.selectById(id));
+    }
+
+    @Transactional
+    public void deleteHospitalAdmin(Long id) {
+        User u = requireAccount(id, "医院管理员");
+        userMapper.deleteById(id);
+    }
+
+    @Transactional
+    public void resetHospitalAdminPassword(Long id, String newPassword) {
+        if (newPassword == null || newPassword.length() < 6) {
+            throw new BusinessException(ErrorCode.SERVER_ERROR, "新密码长度需在 6-32 位");
+        }
+        User u = requireAccount(id, "医院管理员");
+        u.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+        u.setUpdatedAt(LocalDateTime.now());
+        userMapper.updateById(u);
+    }
+
+    // ---------- 通用私有工具 ----------
+
+    private User requireAccount(Long id, String type) {
+        User u = userMapper.selectById(id);
+        if (u == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND, type + "不存在");
+        }
+        return u;
+    }
+
+    /** 数据隔离：医院管理员操作的目标账号必须属于当前账号的医院 */
+    private void assertOwnHospital(String role, User target) {
+        if ("hospital_admin".equals(role)) {
+            Long hid = UserContext.get() == null ? null : UserContext.get().getHospitalId();
+            if (hid == null || !hid.equals(target.getHospitalId())) {
+                throw new BusinessException(ErrorCode.FORBIDDEN, "无权操作其他医院的账号");
+            }
+        }
+    }
+
+    /** 登录账号查重（编辑时排除自身） */
+    private void checkPhoneUnique(String phone, Long excludeId) {
+        if (phone == null || phone.isBlank()) return;
+        LambdaQueryWrapper<User> qw = new LambdaQueryWrapper<User>().eq(User::getPhone, phone);
+        if (excludeId != null) qw.ne(User::getId, excludeId);
+        Long cnt = userMapper.selectCount(qw);
+        if (cnt != null && cnt > 0) {
+            throw new BusinessException(ErrorCode.PHONE_REGISTERED, "账号已存在");
+        }
     }
 
     // ---------- 工作台统计 ----------

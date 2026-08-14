@@ -2,7 +2,7 @@
   <div class="admin-topbar">
     <div class="topbar-left">
       <template v-if="isHospitalAdmin">
-        <el-tag class="lock-tag" size="large">已锁定本院</el-tag>
+        <el-tag class="lock-tag" size="large">{{ auth.hospitalName || '本院' }}</el-tag>
         <el-tag size="large" type="info" style="margin-left:8px;">数据范围：本院</el-tag>
       </template>
       <span v-else class="topbar-title">{{ pageTitle }}</span>

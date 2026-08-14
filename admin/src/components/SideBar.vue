@@ -1,7 +1,7 @@
 <template>
   <aside class="admin-side">
     <div class="admin-logo">
-      {{ isHospitalAdmin ? '北京协和医院 · 管理后台' : '血栓检测 · 管理后台' }}
+      {{ isHospitalAdmin ? (auth.hospitalName || '医院') + ' · 管理后台' : '血栓检测 · 管理后台' }}
     </div>
     <el-menu class="admin-menu" :default-active="activeMenu" router>
       <el-menu-item v-for="m in auth.menus" :key="m.path" :index="m.path">

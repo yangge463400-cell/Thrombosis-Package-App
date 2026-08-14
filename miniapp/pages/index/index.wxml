@@ -1,62 +1,139 @@
 <view class="home-page">
-  <nav-bar title="血栓检测服务"></nav-bar>
-
-  <!-- 搜索栏 -->
-  <view class="search-bar" bindtap="goPackageList">
-    <text class="search-icon">⌕</text>
-    <text class="search-ph">搜索检测套餐</text>
+  <!-- 自定义头部：标题 + 搜索框（与右上角胶囊同行，浅色背景） -->
+  <view class="home-header" style="padding-top: {{statusBarHeight}}px;">
+    <view class="hh-row" style="height: {{navBarHeight}}px;">
+      <text class="hh-title">血栓检测</text>
+      <view class="hh-search" bindtap="goPackageList">
+        <text class="hh-search-icon">⌕</text>
+        <text class="hh-search-ph">搜索检测套餐</text>
+      </view>
+    </view>
   </view>
 
-  <!-- Banner 轮播 -->
-  <swiper class="banner" indicator-dots autoplay circular interval="4000" indicator-active-color="#1677FF">
-    <swiper-item wx:for="{{banners}}" wx:key="id" bindtap="onBannerTap" data-item="{{item}}">
-      <image class="banner-img" src="{{item.image}}" mode="aspectFill"></image>
-    </swiper-item>
-  </swiper>
+  <!-- Banner 轮播（单图视觉 + 自定义右下指示器） -->
+  <view class="banner-wrap">
+    <swiper class="banner-swiper" autoplay circular interval="4500" duration="400" bindchange="onBannerChange">
+      <swiper-item wx:for="{{banners}}" wx:key="id">
+        <view class="banner-card" style="background: {{item.gradient}};" bindtap="onBannerTap" data-item="{{item}}">
+          <view class="banner-content">
+            <view class="banner-title">{{item.title}}</view>
+            <view class="banner-subtitle">{{item.subtitle}}</view>
+            <view class="banner-btn" catchtap="onBannerAction" data-item="{{item}}">{{item.buttonText}}</view>
+          </view>
+          <!-- 右上装饰：外圈半透明圆 + 白色实心圆 + 蓝色十字 -->
+          <view class="banner-deco">
+            <view class="bd-outer"></view>
+            <view class="bd-inner"><text class="bd-plus">+</text></view>
+          </view>
+        </view>
+      </swiper-item>
+    </swiper>
+    <view class="banner-dots">
+      <view wx:for="{{banners}}" wx:key="id" class="bdot {{bannerIndex === index ? 'bdot-active' : ''}}"></view>
+    </view>
+  </view>
 
-  <!-- 8 宫格 -->
+  <!-- 8 宫格（纯 CSS 彩色扁平图标，无背景色块） -->
   <view class="grid card">
     <view class="grid-item" wx:for="{{grids}}" wx:key="key" bindtap="onGridTap" data-key="{{item.key}}">
-      <view class="grid-icon {{item.bg}}">
-        <text>{{item.icon}}</text>
-        <view wx:if="{{item.key === 'messages' && unreadCount > 0}}" class="grid-badge">{{unreadCount > 99 ? '99+' : unreadCount}}</view>
+      <view class="gi">
+        <!-- 检测套餐：蓝色医疗箱 -->
+        <block wx:if="{{item.key === 'package'}}">
+          <view class="ic-kit">
+            <view class="ic-kit-handle"></view>
+            <view class="ic-kit-cv"></view>
+            <view class="ic-kit-ch"></view>
+          </view>
+        </block>
+        <!-- 我的订单：黄色对勾方块 -->
+        <block wx:elif="{{item.key === 'orders'}}">
+          <view class="ic-check"><view class="ic-check-mark"></view></view>
+        </block>
+        <!-- 检测记录：绿色文档 -->
+        <block wx:elif="{{item.key === 'results'}}">
+          <view class="ic-doc">
+            <view class="ic-doc-line ic-doc-l1"></view>
+            <view class="ic-doc-line ic-doc-l2"></view>
+            <view class="ic-doc-line ic-doc-l3"></view>
+          </view>
+        </block>
+        <!-- 用药管理：红色十字圆 -->
+        <block wx:elif="{{item.key === 'medication'}}">
+          <view class="ic-pill">
+            <view class="ic-pill-cv"></view>
+            <view class="ic-pill-ch"></view>
+          </view>
+        </block>
+        <!-- 消息中心：灰色铃铛 -->
+        <block wx:elif="{{item.key === 'messages'}}">
+          <view class="ic-bell">
+            <view class="ic-bell-top"></view>
+            <view class="ic-bell-dot"></view>
+          </view>
+          <view wx:if="{{unreadCount > 0}}" class="grid-badge">{{unreadCount > 99 ? '99+' : unreadCount}}</view>
+        </block>
+        <!-- 合作医院：蓝色十字方块 -->
+        <block wx:elif="{{item.key === 'hospitals'}}">
+          <view class="ic-hosp">
+            <view class="ic-hosp-cv"></view>
+            <view class="ic-hosp-ch"></view>
+          </view>
+        </block>
+        <!-- 帮助客服：绿色对话气泡 -->
+        <block wx:elif="{{item.key === 'help'}}">
+          <view class="ic-chat">
+            <view class="ic-chat-tail"></view>
+            <view class="ic-chat-dot ic-chat-d1"></view>
+            <view class="ic-chat-dot ic-chat-d2"></view>
+            <view class="ic-chat-dot ic-chat-d3"></view>
+          </view>
+        </block>
+        <!-- 更多：灰色三点 -->
+        <block wx:else>
+          <view class="ic-more">
+            <view class="ic-more-dot"></view>
+            <view class="ic-more-dot"></view>
+            <view class="ic-more-dot"></view>
+          </view>
+        </block>
       </view>
       <text class="grid-text">{{item.text}}</text>
     </view>
   </view>
 
-  <!-- 进行中订单卡 -->
-  <view wx:if="{{ongoingOrder}}" class="card ongoing-card mt-3" bindtap="goOrderDetail" data-id="{{ongoingOrder.id}}">
-    <view class="ongoing-head">
-      <text class="ongoing-title">进行中订单</text>
-      <tag text="{{ongoingOrder.statusText}}" type="{{ongoingOrder.statusType}}"></tag>
+  <!-- 进行中订单卡（参考图布局：左上状态标签 + 标题 / 提示 + 按钮） -->
+  <view wx:if="{{ongoingOrder}}" class="ongoing-card" bindtap="goOrderDetail" data-id="{{ongoingOrder.id}}">
+    <view class="oc-row1">
+      <text class="oc-tag {{ongoingOrder.status === 'paid' ? 'oc-tag-wait' : 'oc-tag-pay'}}">{{ongoingOrder.statusText}}</text>
+      <text class="oc-title">{{ongoingOrder.packageName}}</text>
     </view>
-    <view class="ongoing-body">
-      <text class="ongoing-name">{{ongoingOrder.packageName}}</text>
-      <price-display value="{{ongoingOrder.payAmount}}" size="normal" color="danger"></price-display>
-    </view>
-    <view class="ongoing-actions" catchtap="noop">
-      <button wx:if="{{ongoingOrder.status === 'pending_pay'}}" class="btn btn-primary ongoing-btn" catchtap="goPay" data-id="{{ongoingOrder.id}}">去支付</button>
-      <button wx:if="{{ongoingOrder.status === 'paid'}}" class="btn btn-primary ongoing-btn" catchtap="goVerifyCode" data-id="{{ongoingOrder.id}}">查看核销码</button>
+    <view class="oc-row2">
+      <text class="oc-tip">{{ongoingOrder.status === 'paid' ? '已支付 · 前往医院出示核销码' : '订单待支付，请尽快完成'}}</text>
+      <view class="oc-btn" catchtap="onOngoingAction">{{ongoingOrder.status === 'paid' ? '查看核销码' : '去支付'}}</view>
     </view>
   </view>
 
-  <!-- 推荐套餐 -->
-  <view class="recommend mt-4">
+  <!-- 推荐套餐（2 列网格，名称 / 已售 / 价格 纵向排版） -->
+  <view class="recommend">
     <view class="recommend-head">
-      <text class="t-card-title">推荐套餐</text>
-      <text class="recommend-more" bindtap="goPackageList">更多 ›</text>
+      <text class="recommend-title">推荐套餐</text>
+      <text class="recommend-more" bindtap="goPackageList">查看全部 ›</text>
     </view>
-    <scroll-view scroll-x class="recommend-scroll" show-scrollbar="{{false}}">
-      <view class="rec-card" wx:for="{{recommendPackages}}" wx:key="id" bindtap="goPackageDetail" data-id="{{item.id}}">
-        <image class="rec-img" src="{{item.cover}}" mode="aspectFill"></image>
-        <view class="rec-name">{{item.name}}</view>
-        <view class="rec-bottom">
-          <price-display value="{{item.price}}" size="normal" color="danger"></price-display>
-          <text class="rec-sales">已售{{item.salesCount || 0}}</text>
+    <view class="recommend-grid">
+      <view class="rec-card"
+            wx:for="{{recommendPackages}}"
+            wx:key="id"
+            bindtap="goPackageDetail"
+            data-id="{{item.id}}">
+        <view class="rec-cover" style="background: {{item.coverGradient}};">
+          <text class="rec-cover-emoji">{{item.coverEmoji || '🩺'}}</text>
         </view>
+        <view class="rec-name">{{item.name}}</view>
+        <view class="rec-sales">已售 {{item.salesText}}</view>
+        <view class="rec-price"><text class="rec-price-symbol">¥</text><text class="rec-price-num">{{item.priceText}}</text></view>
       </view>
-    </scroll-view>
+    </view>
+    <view wx:if="{{recommendPackages.length === 0}}" class="rec-empty">暂无推荐套餐</view>
   </view>
 
   <view style="height: 40rpx;"></view>

@@ -12,7 +12,7 @@
         <!-- 医院管理员角色提示 -->
         <div v-if="mode === 'hospital'" class="role-hint">
           <el-tag type="success" size="large">医院管理员</el-tag>
-          <span class="role-hint-text">数据范围锁定本院（北京协和医院）</span>
+          <span class="role-hint-text">数据范围锁定登录账号所属医院</span>
           <el-button link type="primary" @click="switchMode">切换账号 ›</el-button>
         </div>
         <div v-else class="role-hint role-hint-blue">

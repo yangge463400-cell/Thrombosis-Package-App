@@ -1,7 +1,9 @@
 package com.thrombosis.controller;
 
 import com.thrombosis.common.Result;
+import com.thrombosis.dto.AccountVO;
 import com.thrombosis.dto.AdminLoginRequest;
+import com.thrombosis.dto.AdminUserSaveRequest;
 import com.thrombosis.dto.PageResult;
 import com.thrombosis.entity.Hospital;
 import com.thrombosis.entity.Package;
@@ -30,6 +32,95 @@ public class AdminController {
     @PostMapping("/login")
     public Result<Map<String, Object>> login(@Valid @RequestBody AdminLoginRequest req) {
         return Result.ok(adminService.login(req.getAccount(), req.getPassword()));
+    }
+
+    // ---------- 当前账号信息（顶部医院名动态展示） ----------
+    @GetMapping("/me")
+    @RequireRole({"admin", "hospital_admin"})
+    public Result<Map<String, Object>> me() {
+        var ctx = UserContext.get();
+        return Result.ok(adminService.me(ctx.getRole(), ctx.getUserId(), ctx.getHospitalId()));
+    }
+
+    // ---------- 医护管理（医院端锁本院 / 平台端可全量） ----------
+    @GetMapping("/staffs")
+    @RequireRole({"admin", "hospital_admin"})
+    public Result<PageResult<AccountVO>> staffs(
+            @RequestParam(required = false) Long hospitalId,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        var ctx = UserContext.get();
+        return Result.ok(adminService.staffs(ctx.getRole(), hospitalId, keyword, page, pageSize));
+    }
+
+    @PostMapping("/staffs")
+    @RequireRole({"admin", "hospital_admin"})
+    public Result<AccountVO> createStaff(@Valid @RequestBody AdminUserSaveRequest req) {
+        var ctx = UserContext.get();
+        return Result.ok(adminService.createStaff(ctx.getRole(), req));
+    }
+
+    @PutMapping("/staffs/{id}")
+    @RequireRole({"admin", "hospital_admin"})
+    public Result<AccountVO> updateStaff(@PathVariable Long id,
+                                                            @Valid @RequestBody AdminUserSaveRequest req) {
+        var ctx = UserContext.get();
+        return Result.ok(adminService.updateStaff(ctx.getRole(), id, req));
+    }
+
+    @DeleteMapping("/staffs/{id}")
+    @RequireRole({"admin", "hospital_admin"})
+    public Result<Void> deleteStaff(@PathVariable Long id) {
+        var ctx = UserContext.get();
+        adminService.deleteStaff(ctx.getRole(), id);
+        return Result.ok();
+    }
+
+    @PostMapping("/staffs/{id}/reset-password")
+    @RequireRole({"admin", "hospital_admin"})
+    public Result<Void> resetStaffPassword(@PathVariable Long id, @RequestBody Map<String, String> body) {
+        var ctx = UserContext.get();
+        adminService.resetStaffPassword(ctx.getRole(), id, body.getOrDefault("password", ""));
+        return Result.ok();
+    }
+
+    // ---------- 医院管理员管理（仅平台管理员） ----------
+    @GetMapping("/hospital-admins")
+    @RequireRole({"admin"})
+    public Result<PageResult<AccountVO>> hospitalAdmins(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Long hospitalId,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        return Result.ok(adminService.hospitalAdmins(keyword, hospitalId, page, pageSize));
+    }
+
+    @PostMapping("/hospital-admins")
+    @RequireRole({"admin"})
+    public Result<AccountVO> createHospitalAdmin(@Valid @RequestBody AdminUserSaveRequest req) {
+        return Result.ok(adminService.createHospitalAdmin(req));
+    }
+
+    @PutMapping("/hospital-admins/{id}")
+    @RequireRole({"admin"})
+    public Result<AccountVO> updateHospitalAdmin(@PathVariable Long id,
+                                                                    @Valid @RequestBody AdminUserSaveRequest req) {
+        return Result.ok(adminService.updateHospitalAdmin(id, req));
+    }
+
+    @DeleteMapping("/hospital-admins/{id}")
+    @RequireRole({"admin"})
+    public Result<Void> deleteHospitalAdmin(@PathVariable Long id) {
+        adminService.deleteHospitalAdmin(id);
+        return Result.ok();
+    }
+
+    @PostMapping("/hospital-admins/{id}/reset-password")
+    @RequireRole({"admin"})
+    public Result<Void> resetHospitalAdminPassword(@PathVariable Long id, @RequestBody Map<String, String> body) {
+        adminService.resetHospitalAdminPassword(id, body.getOrDefault("password", ""));
+        return Result.ok();
     }
 
     // ---------- 工作台统计 ----------

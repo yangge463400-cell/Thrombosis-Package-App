@@ -13,6 +13,8 @@ const routes = [
       { path: 'packages/edit/:id?', name: 'package-edit', component: () => import('../views/packages/Edit.vue'), meta: { title: '套餐编辑', roles: ['admin'] } },
       { path: 'verify', name: 'verify', component: () => import('../views/verify/index.vue'), meta: { title: '核销管理', roles: ['admin', 'hospital_admin'] } },
       { path: 'sales', name: 'sales', component: () => import('../views/sales/index.vue'), meta: { title: '售卖管理', roles: ['admin', 'hospital_admin'] } },
+      { path: 'staffs', name: 'staffs', component: () => import('../views/staffs/index.vue'), meta: { title: '医护管理', roles: ['admin', 'hospital_admin'] } },
+      { path: 'hospital-admins', name: 'hospital-admins', component: () => import('../views/hospital-admins/index.vue'), meta: { title: '医院管理员', roles: ['admin'] } },
       { path: 'bills', name: 'bills', component: () => import('../views/bills/index.vue'), meta: { title: '支付账单', roles: ['admin'] } },
       { path: 'hospitals', name: 'hospitals', component: () => import('../views/hospitals/index.vue'), meta: { title: '医院管理', roles: ['admin'] } }
     ]
