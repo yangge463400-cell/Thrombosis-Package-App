@@ -76,7 +76,12 @@ async function onSync(row) {
   try {
     const bill = await adminApi.syncBill(row.id);
     row.reconcileStatus = bill.reconcileStatus;
-    ElMessage.success('重新同步完成，已对账');
+    // 如实提示：仅订单为已支付(paid)时同步才会置为对账成功
+    if (bill.reconcileStatus === 'ok') {
+      ElMessage.success('重新同步完成，已对账');
+    } else {
+      ElMessage.warning('同步完成，但订单非已支付状态，账单仍为差异状态');
+    }
   } catch (e) { /* toast */ }
   syncing.value = null;
 }

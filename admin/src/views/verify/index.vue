@@ -2,7 +2,7 @@
   <div>
     <div class="list-head">
       <div class="page-title">{{ isHospital ? '本院核销记录' : '核销管理' }}</div>
-      <el-button type="primary" @click="onExport">导出{{ isHospital ? '本院' : '' }}记录</el-button>
+      <el-button type="primary" @click="onExport">导出当前页{{ isHospital ? '本院' : '' }}记录</el-button>
     </div>
 
     <!-- 筛选 -->
@@ -25,8 +25,12 @@
       <el-table-column prop="orderId" label="订单ID" width="90" />
       <el-table-column prop="packageName" label="套餐" min-width="160" />
       <el-table-column prop="userPhone" label="用户" width="130" />
-      <el-table-column v-if="!isHospital" prop="hospitalId" label="医院" width="110" />
-      <el-table-column prop="staffId" label="核销人" width="110" />
+      <el-table-column v-if="!isHospital" label="医院" width="140">
+        <template #default="{ row }">{{ hospitalName(row.hospitalId) }}</template>
+      </el-table-column>
+      <el-table-column label="核销人" width="110">
+        <template #default="{ row }">{{ staffName(row.staffId) }}</template>
+      </el-table-column>
       <el-table-column prop="verifyTime" label="核销时间" width="170" />
     </el-table>
 
@@ -53,6 +57,11 @@ const hospitalId = ref(null);
 const dateRange = ref(null);
 const status = ref('');
 const hospitals = ref([]);
+const staffs = ref([]);
+
+// ID → 名称映射（列表接口返回的是原始 ID，无名称字段）
+const hospitalName = (id) => (hospitals.value.find(h => h.id === id) || {}).name ?? (id ?? '-');
+const staffName = (id) => (staffs.value.find(s => s.id === id) || {}).nickname ?? (id ?? '-');
 
 async function load(p) {
   page.value = p || 1;
@@ -76,17 +85,37 @@ async function loadHospitals() {
   } catch (e) { /* 忽略 */ }
 }
 
+async function loadStaffs() {
+  try {
+    const data = await adminApi.staffs({ page: 1, pageSize: 100 });
+    staffs.value = data.list || [];
+  } catch (e) { /* 忽略 */ }
+}
+
+// CSV 单元格转义：防逗号/引号撕裂列
+function csvCell(v) {
+  const s = v === null || v === undefined ? '' : String(v);
+  return `"${s.replace(/"/g, '""')}"`;
+}
+
 function onExport() {
-  const rows = list.value.map(r => Object.values(r).join(',')).join('\n');
-  const blob = new Blob(['核销码,订单ID,套餐,用户,医院,核销人,时间\n' + rows], { type: 'text/csv;charset=utf-8' });
+  // 显式列映射（与表头一一对应，不再用 Object.values 兜全部字段）
+  const header = ['核销码', '订单ID', '套餐', '用户', '医院', '核销人', '核销时间'];
+  const lines = list.value.map(r => [
+    r.code, r.orderId, r.packageName, r.userPhone,
+    hospitalName(r.hospitalId), staffName(r.staffId), r.verifyTime
+  ].map(csvCell).join(','));
+  // \uFEFF BOM：Excel 直接打开中文不乱码
+  const blob = new Blob(['\uFEFF' + header.map(csvCell).join(',') + '\n' + lines.join('\n')], { type: 'text/csv;charset=utf-8' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = '核销记录.csv';
+  a.download = `核销记录_${new Date().toISOString().slice(0, 10)}.csv`;
   a.click();
 }
 
 onMounted(() => {
-  if (!isHospital.value) loadHospitals();
+  loadHospitals();
+  loadStaffs();
   load(1);
 });
 </script>

@@ -5,11 +5,12 @@ const MENUS = {
   admin: [
     { path: '/dashboard', title: '工作台', icon: 'Odometer' },
     { path: '/packages', title: '套餐管理', icon: 'Box' },
+    { path: '/staffs', title: '医护管理', icon: 'User' },
     { path: '/verify', title: '核销管理', icon: 'Checked' },
     { path: '/sales', title: '售卖管理', icon: 'ShoppingCart' },
     { path: '/bills', title: '支付账单', icon: 'Money' },
     { path: '/hospitals', title: '医院管理', icon: 'OfficeBuilding' },
-    { path: '/hospital-admins', title: '医院管理员', icon: 'User' }
+    { path: '/hospital-admins', title: '医院管理员', icon: 'UserFilled' }
   ],
   hospital_admin: [
     { path: '/dashboard', title: '工作台', icon: 'Odometer' },

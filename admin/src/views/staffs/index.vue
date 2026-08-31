@@ -157,6 +157,8 @@ async function onSave() {
   if (auth.isAdmin && !form.value.hospitalId) { ElMessage.warning('请选择所属医院'); return; }
   saving.value = true;
   const payload = { ...form.value };
+  // 编辑时密码留空表示不修改：必须从 payload 剔除空串（后端 @Size(min=6) 对空串会校验失败）
+  if (form.value.id && !payload.password) delete payload.password;
   try {
     if (form.value.id) {
       await adminApi.updateStaff(form.value.id, payload);

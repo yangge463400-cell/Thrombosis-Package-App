@@ -2,16 +2,13 @@
   <div>
     <div class="page-title" style="margin-bottom: 20px;">{{ isHospital ? '本院售卖管理' : '售卖管理' }}</div>
 
-    <!-- 统计卡（医院端不显示金额） -->
+    <!-- 统计卡（医院端不显示金额，展示计数口径） -->
     <el-row :gutter="20">
-      <el-col :span="8">
-        <StatCard :label="isHospital ? '本院售卖份数' : '总销售额'" :value="isHospital ? soldCount : totalAmount" :is-money="!isHospital" :hide-money="isHospital" />
+      <el-col :span="12">
+        <StatCard :label="isHospital ? '本院售卖份数' : '总销售额'" :value="isHospital ? soldCount : totalAmount" :is-money="!isHospital" />
       </el-col>
-      <el-col :span="8">
-        <StatCard :label="isHospital ? '本院订单数' : '订单数'" :value="orderCount" />
-      </el-col>
-      <el-col :span="8">
-        <StatCard label="退款数" :value="refundCount" />
+      <el-col :span="12">
+        <StatCard :label="isHospital ? '本院订单数（已完成）' : '订单数'" :value="orderCount" />
       </el-col>
     </el-row>
 
@@ -57,7 +54,7 @@ const pageSize = ref(10);
 const soldCount = ref(0);
 const totalAmount = ref(0);
 const orderCount = ref(0);
-const refundCount = ref(0);
+// 退款数卡片已移除：后端无退款统计字段，原死变量恒为 0 会误导运营
 
 const STATUS = {
   pending_pay: { text: '待支付', type: 'warning' },
@@ -76,7 +73,9 @@ async function load(p) {
     list.value = (data.list || []).map(r => ({ ...r, createdAt: formatTime(r.createdAt) }));
     total.value = data.total;
     if (isHospital.value) {
+      // 后端医院端口径：仅返回本院已完成订单，total 即已完成单数
       soldCount.value = data.total;
+      orderCount.value = data.total;
     } else {
       // 全量销售额：来自统计接口（全部已支付订单），不随当前页变化
       const st = await adminApi.statistics();

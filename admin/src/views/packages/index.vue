@@ -15,7 +15,7 @@
       <el-button type="primary" style="margin-left:12px;" @click="load(1)">查询</el-button>
     </div>
 
-    <el-table :data="list" stripe style="margin-top:16px;" @row-click="goEdit">
+    <el-table :data="list" stripe style="margin-top:16px;" @row-click="(row) => goEdit(row.id)">
       <el-table-column label="封面" width="80">
         <template #default="{ row }">
           <el-image :src="row.cover" style="width:48px;height:48px;border-radius:6px;" fit="cover">
