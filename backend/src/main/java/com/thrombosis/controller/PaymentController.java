@@ -30,14 +30,18 @@ public class PaymentController {
     @PostMapping("/mock-callback")
     public Result<Map<String, Object>> mockCallback(@org.springframework.web.bind.annotation.RequestBody Map<String, Object> body) {
         if (!mockPaymentEnabled) {
-            return Result.error(401, "模拟支付未开放（生产环境请走微信支付）");
+            // 注意：这里不能用 401——小程序请求层把 body code=401 一律视为"登录过期"强制登出，
+            // 功能未开放属业务拒绝，用 403 区分（N9 修复）
+            return Result.error(403, "模拟支付未开放（生产环境请走微信支付）");
         }
         Object orderIdObj = body.get("orderId");
         if (orderIdObj == null) {
             return Result.error(500, "orderId 不能为空");
         }
         Long orderId = Long.valueOf(String.valueOf(orderIdObj));
-        var o = orderService.mockPayCallback(orderId);
+        // 归属校验：仅允许为本人订单支付（微信支付回调语义上也是为当前用户自己的订单扣款）
+        Long userId = com.thrombosis.security.UserContext.currentUserId();
+        var o = orderService.mockPayCallback(orderId, userId);
         return Result.ok(Map.of("orderId", o.getId(), "status", o.getStatus(), "verifyCode", o.getVerifyCode()));
     }
 }

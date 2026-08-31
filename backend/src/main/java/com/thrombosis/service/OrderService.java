@@ -113,22 +113,38 @@ public class OrderService {
 
     /**
      * 模拟微信支付回调（dev 专用，thrombosis.dev.mock.payment=true 时开放）
-     * 置订单已支付、生成核销码、写支付账单、推送站内消息
+     * 置订单已支付、生成核销码、写支付账单、推送站内消息。
+     * 幂等：带 status='pending_pay' 条件的原子更新（CAS），并发/重复回调仅一次生效，
+     * 不会产生重复账单、重复消息或核销码覆盖（微信回调重复投递是常态，必须幂等处理）。
      */
     @Transactional
-    public Orders mockPayCallback(Long orderId) {
+    public Orders mockPayCallback(Long orderId, Long userId) {
         Orders o = ordersMapper.selectById(orderId);
-        if (o == null) {
+        if (o == null || userId == null || !o.getUserId().equals(userId)) {
+            // 归属校验：非本人订单按不存在处理，避免泄露他人订单信息
             throw new BusinessException(ErrorCode.NOT_FOUND, "订单不存在");
         }
         if (!"pending_pay".equals(o.getStatus())) {
             throw new BusinessException(ErrorCode.ORDER_NOT_PAYABLE, "订单不可支付，请刷新");
         }
+        LocalDateTime payTime = LocalDateTime.now();
+        String verifyCode = genVerifyCode();
+        int updated = ordersMapper.update(null,
+                new com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper<Orders>()
+                        .eq(Orders::getId, o.getId())
+                        .eq(Orders::getStatus, "pending_pay")
+                        .set(Orders::getStatus, "paid")
+                        .set(Orders::getPayChannel, "wx")
+                        .set(Orders::getPayTime, payTime)
+                        .set(Orders::getVerifyCode, verifyCode));
+        if (updated == 0) {
+            // 并发中已被其他请求支付成功（或状态已变化），按幂等拒绝，与串行重复支付同语义
+            throw new BusinessException(ErrorCode.ORDER_NOT_PAYABLE, "订单不可支付，请刷新");
+        }
         o.setStatus("paid");
         o.setPayChannel("wx");
-        o.setPayTime(LocalDateTime.now());
-        o.setVerifyCode(genVerifyCode());
-        ordersMapper.updateById(o);
+        o.setPayTime(payTime);
+        o.setVerifyCode(verifyCode);
 
         PayBill bill = new PayBill();
         bill.setOrderId(o.getId());
@@ -141,12 +157,11 @@ public class OrderService {
         bill.setReconcileStatus("ok");
         payBillMapper.insert(bill);
 
-        // 销量 +1
-        Package pkg = packageMapper.selectById(o.getPackageId());
-        if (pkg != null) {
-            pkg.setSalesCount((pkg.getSalesCount() == null ? 0 : pkg.getSalesCount()) + 1);
-            packageMapper.updateById(pkg);
-        }
+        // 销量原子自增（避免并发读-改-写丢更新）
+        packageMapper.update(null,
+                new com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper<Package>()
+                        .eq(Package::getId, o.getPackageId())
+                        .setSql("sales_count = COALESCE(sales_count, 0) + 1"));
 
         messageService.send(o.getUserId(), "order", "支付成功",
                 "您的订单 " + o.getOrderNo() + " 已支付成功，核销码 " + o.getVerifyCode() + "，请到院出示。",
@@ -189,8 +204,9 @@ public class OrderService {
     }
 
     private String genOrderNo() {
+        // 6 位随机段：3 位时每秒仅 1000 个槽位，同秒并发下单易撞 uk_order_no（生日问题）
         return "TH" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
-                + String.format("%03d", RANDOM.nextInt(1000));
+                + String.format("%06d", RANDOM.nextInt(1_000_000));
     }
 
     private String genVerifyCode() {
