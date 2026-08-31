@@ -22,8 +22,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "/api/dicts/**",         // 字典
                         "/api/hospitals",        // 医院列表（公开）
                         "/api/admin/login",      // 管理端登录
-                        "/api/staff/login",      // 医护登录
-                        "/api/orders/*/qrcode"   // 核销二维码（小程序 image 标签加载，不可带 Authorization 头）
+                        "/api/staff/login"       // 医护登录
                 );
     }
 }

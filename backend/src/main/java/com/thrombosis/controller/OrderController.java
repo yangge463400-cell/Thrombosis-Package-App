@@ -57,13 +57,15 @@ public class OrderController {
     }
 
     /**
-     * 核销二维码（PNG）：内容为核销码数字，供微信小程序 <image> 直接加载展示；
-     * 公开访问（核销码本身随机不可猜测，安全性由 verify/check 校验保障）。
+     * 核销二维码（PNG）：内容为核销码数字。需登录且仅订单本人可获取
+     * （小程序端先带 Authorization 头下载为 arraybuffer，再转 base64 供 <image> 展示）。
      */
     @GetMapping(value = "/{id}/qrcode", produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] qrcode(@PathVariable Long id) throws Exception {
+        Long userId = UserContext.currentUserId();
         Orders o = ordersMapper.selectById(id);
-        if (o == null) {
+        if (o == null || userId == null || !o.getUserId().equals(userId)) {
+            // 归属校验：非本人订单按不存在处理
             throw new BusinessException(ErrorCode.NOT_FOUND, "订单不存在");
         }
         if (o.getVerifyCode() == null) {
