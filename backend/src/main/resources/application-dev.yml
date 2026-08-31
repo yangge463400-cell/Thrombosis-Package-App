@@ -14,8 +14,14 @@ thrombosis:
     # HS256 密钥（>=32 字节），生产环境务必通过环境变量覆盖
     secret: thrombosis-app-jwt-secret-key-2026-0811-07180042-abcdefg
     expire-hours: 168
+  wechat:
+    # 真实微信登录：设置环境变量 WX_APPID / WX_SECRET 后自动生效；
+    # 未配置时按 dev.mock.enabled 决定走 mock 还是拒绝（生产漏配凭据 fail-closed）
+    appid: ${WX_APPID:}
+    secret: ${WX_SECRET:}
   dev:
     mock:
+      enabled: true                  # mock 微信登录开关：仅 dev 开启；生产必须为 false（默认 false）
       # 开发态模拟开关（无真实微信凭据即可跑通全流程）
       verify-code: "123456"          # 短信验证码固定值
       openid-prefix: "mock_openid_"  # wx.login code 任意值映射的测试 openid 前缀
