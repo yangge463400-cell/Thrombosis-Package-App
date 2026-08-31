@@ -1,6 +1,7 @@
 package com.thrombosis.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.thrombosis.common.BusinessException;
 import com.thrombosis.common.ErrorCode;
 import com.thrombosis.dto.PageResult;
@@ -9,10 +10,7 @@ import com.thrombosis.mapper.PackageMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -21,36 +19,42 @@ public class PackageService {
     private final PackageMapper packageMapper;
 
     /**
-     * 套餐列表：city / itemNames 过滤 + 排序 + 分页
-     * itemNames 为检测项目名称（套餐 items JSON 以 name 字段关联，无独立 id）
+     * 套餐列表：city / itemNames 过滤 + 排序 + 分页（全部在 SQL 层完成）
+     * cities / items 为 JSON 列，用 JSON_CONTAINS / JSON_SEARCH 做语义匹配，
+     * 排序与分页走数据库，避免全表加载进 JVM。
      */
     public PageResult<Package> list(int page, int pageSize, String city, List<String> itemNames, String sort) {
-        List<Package> all = packageMapper.selectList(
-                new LambdaQueryWrapper<Package>().eq(Package::getStatus, "on"));
-        List<Package> filtered = new ArrayList<>(all);
-
+        // 分页参数归一化：page 从 1 起，pageSize 限制在 1..100，杜绝 0/负数/超大值引发的异常
+        int pageNo = Math.max(1, page);
+        int pageSizeN = Math.min(100, Math.max(1, pageSize));
+        QueryWrapper<Package> qw = new QueryWrapper<>();
+        qw.eq("status", "on");
         if (city != null && !city.isBlank()) {
-            filtered.removeIf(p -> p.getCities() == null || p.getCities().stream().noneMatch(c -> c.equals(city)));
+            qw.apply("JSON_CONTAINS(cities, JSON_QUOTE({0}))", city);
         }
         if (itemNames != null && !itemNames.isEmpty()) {
-            filtered.removeIf(p -> p.getItems() == null
-                    || p.getItems().stream().noneMatch(it -> itemNames.contains(String.valueOf(it.get("name")))));
+            // 任一项目名命中即保留（与原内存 noneMatch/noneMatch 语义一致：存在一条 name 在集合内）
+            qw.and(w -> {
+                for (int i = 0; i < itemNames.size(); i++) {
+                    String name = itemNames.get(i);
+                    if (name == null || name.isBlank()) continue;
+                    w.or(x -> x.apply("JSON_SEARCH(items, 'one', {0}, NULL, '$[*].name') IS NOT NULL", name));
+                }
+            });
         }
-
         if ("price_asc".equals(sort)) {
-            filtered.sort(Comparator.comparing(Package::getPrice));
+            qw.orderByAsc("price");
         } else if ("price_desc".equals(sort)) {
-            filtered.sort(Comparator.comparing(Package::getPrice).reversed());
+            qw.orderByDesc("price");
         } else if ("sales".equals(sort)) {
-            filtered.sort(Comparator.comparing(Package::getSalesCount, Comparator.nullsLast(Comparator.reverseOrder())));
+            qw.orderByDesc("sales_count");
         } else {
-            filtered.sort(Comparator.comparing(Package::getCreatedAt, Comparator.nullsLast(Comparator.reverseOrder())));
+            qw.orderByDesc("created_at");
         }
 
-        int total = filtered.size();
-        int from = Math.min((page - 1) * pageSize, total);
-        int to = Math.min(from + pageSize, total);
-        return PageResult.of(filtered.subList(from, to), total, page, pageSize);
+        Page<Package> p = new Page<>(pageNo, pageSizeN);
+        packageMapper.selectPage(p, qw);
+        return PageResult.of(p.getRecords(), p.getTotal(), pageNo, pageSizeN);
     }
 
     public Package detail(Long id) {
