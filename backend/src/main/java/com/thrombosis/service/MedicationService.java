@@ -41,7 +41,9 @@ public class MedicationService {
         m.setUserId(userId);
         apply(m, req);
         m.setStatus("active");
-        m.setStartAt(LocalDate.now());
+        if (m.getStartAt() == null) {
+            m.setStartAt(LocalDate.now());
+        }
         m.setCreatedAt(LocalDateTime.now());
         medicationMapper.insert(m);
         return m;
@@ -83,7 +85,11 @@ public class MedicationService {
             exist.setTimePointId(timePointId);
             exist.setRecordDate(today);
             exist.setStatus("taken");
-            recordMapper.insert(exist);
+            try {
+                recordMapper.insert(exist);
+            } catch (org.springframework.dao.DuplicateKeyException e) {
+                // 并发打卡撞 uk_med_date 唯一键：记录已被并发请求创建，按幂等成功处理
+            }
         } else {
             exist.setStatus("taken");
             recordMapper.updateById(exist);
@@ -118,7 +124,14 @@ public class MedicationService {
         });
         m.setTimePoints(timePoints);
         m.setReminderOn(req.getReminderOn() == null ? 1 : req.getReminderOn());
-        m.setDoctorAssessed(m.getDoctorAssessed() == null ? "normal" : m.getDoctorAssessed());
+        // 疗程起止与医生评估（对应 schema 的 start_at/end_at/doctor_assessed 三列）
+        m.setStartAt(req.getStartAt());
+        m.setEndAt(req.getEndAt());
+        if (req.getEndAt() != null && req.getStartAt() != null && req.getEndAt().isBefore(req.getStartAt())) {
+            throw new BusinessException(ErrorCode.SERVER_ERROR, "疗程结束日期不能早于开始日期");
+        }
+        m.setDoctorAssessed(req.getDoctorAssessed() != null ? req.getDoctorAssessed()
+                : (m.getDoctorAssessed() == null ? "normal" : m.getDoctorAssessed()));
     }
 
     private Medication getOwned(Long userId, Long id) {
