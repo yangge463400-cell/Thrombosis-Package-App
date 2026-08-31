@@ -17,8 +17,25 @@ thrombosis:
     secret: ${WX_SECRET:}
     mch-id: ${WX_MCH_ID:}
     notify-url: ${WX_NOTIFY_URL:}
+  cors:
+    allowed-origins: ${CORS_ORIGINS:https://localhost}
   dev:
     mock:
+      # 生产必须 false：未配置微信凭据时登录直接拒绝（fail-closed），
+      # 且 send-code 将拒绝下发验证码（短信服务商接入前注册不可用）
+      enabled: false
       verify-code: ""
       openid-prefix: ""
       payment: false
+  init:
+    # 演示用户（张阿姨）生产必须关闭：其 openid 与 dev mock 前缀绑定，污染真实用户表
+    demo-user: false
+    # 首次启动种子账号密码：生产必须通过环境变量注入强密码（见 deploy/README.md）
+    staff-password: ${INIT_STAFF_PASSWORD:123456}
+    admin-password: ${INIT_ADMIN_PASSWORD:admin123}
+    hospital-admin-password: ${INIT_HOSPITAL_ADMIN_PASSWORD:admin123}
+
+logging:
+  level:
+    root: info
+    com.thrombosis: info

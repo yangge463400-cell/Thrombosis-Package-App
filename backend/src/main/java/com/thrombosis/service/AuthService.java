@@ -106,7 +106,12 @@ public class AuthService {
     }
 
     public void sendCode(String phone) {
-        // TODO(prod): 调用短信服务商；dev 下固定验证码
+        // 生产 fail-closed：短信服务商未接入前拒绝下发，避免固定验证码在真实环境被任意注册
+        if (!devMockEnabled) {
+            // TODO(prod): 接入短信服务商（如腾讯云 SMS，签名/模板审批通过后替换此分支）
+            log.warn("[prod] 短信服务未接入，拒绝下发验证码 phone={}", phone);
+            throw new BusinessException(ErrorCode.SERVER_ERROR, "短信服务未接入，请联系管理员");
+        }
         codeStore.put(phone, new StoredCode(mockVerifyCode, System.currentTimeMillis()));
         log.info("[mock] 短信验证码 phone={} code={}", phone, mockVerifyCode);
     }
