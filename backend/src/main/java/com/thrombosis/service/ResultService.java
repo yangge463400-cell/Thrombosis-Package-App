@@ -82,8 +82,12 @@ public class ResultService {
         if (o.getHospitalId() == null || !o.getHospitalId().equals(staffHospitalId)) {
             throw new BusinessException(ErrorCode.FORBIDDEN, "该订单不属于本院，无法出具结果");
         }
-        // 核销即完成，出具结果仅对已完成（已核销）订单开放；幂等更新已有结果
-        if (!"completed".equals(o.getStatus())) {
+        // 状态机：paid →(核销)→ verified(检测中) →(出具结果)→ completed。
+        // 出具结果要求订单处于检测中(verified)；已 completed 的历史订单允许幂等更新结果
+        if ("verified".equals(o.getStatus())) {
+            o.setStatus("completed");
+            ordersMapper.updateById(o);
+        } else if (!"completed".equals(o.getStatus())) {
             throw new BusinessException(ErrorCode.SERVER_ERROR, "订单未核销，无法出具结果");
         }
 

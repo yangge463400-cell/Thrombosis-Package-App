@@ -26,7 +26,9 @@ public class VerifyController {
 
     @PostMapping("/check")
     public Result<Map<String, Object>> check(@Valid @RequestBody VerifyCheckRequest req) {
-        return Result.ok(verifyService.check(req.getCode()));
+        // 医院强制使用医护账号所属医院（UserContext），与 confirm 一致的跨院拦截
+        Long staffHospitalId = UserContext.get() == null ? null : UserContext.get().getHospitalId();
+        return Result.ok(verifyService.check(req.getCode(), staffHospitalId));
     }
 
     @PostMapping("/confirm")
