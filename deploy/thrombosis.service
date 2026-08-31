@@ -1,0 +1,22 @@
+# 腾讯云 systemd 托管单元
+# 安装：sudo cp deploy/thrombosis.service /etc/systemd/system/ && sudo systemctl daemon-reload
+# 启动：sudo systemctl enable --now thrombosis
+# 日志：sudo journalctl -u thrombosis -f
+
+[Unit]
+Description=Thrombosis backend (Spring Boot)
+After=network.target mysql.service
+Wants=mysql.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/thrombosis
+EnvironmentFile=/opt/thrombosis/thrombosis.env
+ExecStart=/usr/bin/java -Xms1g -Xmx2g -jar /opt/thrombosis/thrombosis-backend.jar
+SuccessExitStatus=143
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
