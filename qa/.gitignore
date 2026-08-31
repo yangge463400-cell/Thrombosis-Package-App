@@ -1,0 +1,5 @@
+# 测试临时产物（可随时再生成）
+tmp/*.log
+tmp/cp.txt
+tmp/results.json
+tmp/report.md
