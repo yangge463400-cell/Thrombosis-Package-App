@@ -11,6 +11,8 @@ public final class ErrorCode {
     public static final int FORBIDDEN = 403;
     /** 资源不存在 */
     public static final int NOT_FOUND = 404;
+    /** 参数错误 */
+    public static final int PARAM_ERROR = 400;
     /** 验证码错误 */
     public static final int SMS_CODE_ERROR = 1001;
     /** 手机号已注册 */
