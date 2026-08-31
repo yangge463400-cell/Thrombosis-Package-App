@@ -53,6 +53,10 @@ public class AdminService {
         if (u.getPassword() == null || !new BCryptPasswordEncoder().matches(password, u.getPassword())) {
             throw new BusinessException(ErrorCode.FORBIDDEN, "账号或密码错误");
         }
+        if (!Integer.valueOf(1).equals(u.getStatus())) {
+            // 禁用账号（status=0）拒绝登录，保证管理员被停用后无法再获取新 token
+            throw new BusinessException(ErrorCode.FORBIDDEN, "账号已禁用，请联系管理员");
+        }
         Map<String, Object> r = new HashMap<>();
         r.put("token", jwtUtil.generate(u.getId(), u.getRole(), u.getHospitalId()));
         r.put("userId", u.getId());

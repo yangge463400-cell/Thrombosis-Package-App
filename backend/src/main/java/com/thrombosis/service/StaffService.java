@@ -37,6 +37,10 @@ public class StaffService {
         if (u.getPassword() == null || !encoder.matches(password, u.getPassword())) {
             throw new BusinessException(ErrorCode.FORBIDDEN, "账号或密码错误");
         }
+        if (!Integer.valueOf(1).equals(u.getStatus())) {
+            // 禁用账号（status=0）拒绝登录，保证离职/违规医护可被及时封禁
+            throw new BusinessException(ErrorCode.FORBIDDEN, "账号已禁用，请联系管理员");
+        }
         if (u.getHospitalId() == null) {
             throw new BusinessException(ErrorCode.FORBIDDEN, "无核销权限，请联系管理员");
         }
@@ -56,8 +60,9 @@ public class StaffService {
                 .eq(VerifyRecord::getHospitalId, hospitalId)
                 .ge(VerifyRecord::getVerifyTime, today.atStartOfDay())
                 .lt(VerifyRecord::getVerifyTime, today.plusDays(1).atStartOfDay()));
-        // 待处理：已支付但未核销的订单
+        // 待处理：本院已支付但未核销的订单（按医院过滤，避免泄露/混入他院数据）
         Long pendingCount = ordersMapper.selectCount(new LambdaQueryWrapper<Orders>()
+                .eq(Orders::getHospitalId, hospitalId)
                 .eq(Orders::getStatus, "paid")
                 .isNull(Orders::getVerifyTime));
         Map<String, Object> r = new HashMap<>();
