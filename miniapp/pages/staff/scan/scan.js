@@ -28,7 +28,13 @@ Page(guard.needStaff({
             const vci = this.selectComponent('#vci');
             if (vci) vci._sync(code);
             this._check(code);
+          } else {
+            wx.showToast({ title: '未识别到有效核销码，可手动输入', icon: 'none' });
           }
+        },
+        fail: () => {
+          // 用户取消扫码或相机不可用：页面下方有手动输入框，给出提示即可
+          wx.showToast({ title: '已取消扫码，可手动输入核销码', icon: 'none' });
         }
       });
     }

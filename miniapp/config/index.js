@@ -9,6 +9,8 @@ module.exports = {
   // 开发态能力开关：微信原生能力在无真实凭据时的降级行为
   // requestPaymentMock: true 时「立即支付」走后端模拟支付回调接口
   DEV: {
+    // 注意：后端真实微信支付尚未实现（无下单签名/回调验签）。
+    // 置 false 前必须先接入真实支付，否则支付必然失败（后端返回 403 模拟支付未开放）
     requestPaymentMock: true,   // 支付：调用 /api/payment/mock-callback 模拟
     scanCodeMock: false,        // 扫码：false 时优先真实 wx.scanCode，失败降级手动输入
     locationMock: true          // 定位：直接返回北京坐标（避免隐私弹窗）

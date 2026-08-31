@@ -45,6 +45,11 @@ Page(guard.needStaff({
       wx.showToast({ title: '请先查询订单', icon: 'none' });
       return;
     }
+    // 状态机：仅「检测中(verified)」订单可出具结果；paid 需先完成扫码核销
+    if (this.data.orderInfo.status === 'paid') {
+      wx.showToast({ title: '该订单尚未核销，请先完成扫码核销', icon: 'none', duration: 2000 });
+      return;
+    }
     this.setData({ submitting: true });
     try {
       const abnormal = this.data.conclusion === 'abnormal';

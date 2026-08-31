@@ -19,12 +19,12 @@
       <view class="md-cal-head">
         <text class="md-cal-date" wx:for="{{weekDates}}" wx:key="*this">{{item}}</text>
       </view>
-      <view class="md-cal-row" wx:for="{{timePoints}}" wx:key="id" wx:for-item="tp">
-        <text class="md-cal-time">{{tp.time}}</text>
+      <view class="md-cal-row" wx:for="{{calendar}}" wx:key="id" wx:for-item="row">
+        <text class="md-cal-time">{{row.time}}</text>
         <view class="md-cal-days">
-          <view wx:for="{{weekDates}}" wx:key="*this" wx:for-item="date"
-                class="md-cal-day {{isTaken(tp.id, date) ? 'day-taken' : ''}}">
-            <text>{{isTaken(tp.id, date) ? '✓' : ''}}</text>
+          <view wx:for="{{row.cells}}" wx:key="date" wx:for-item="cell"
+                class="md-cal-day {{cell.taken ? 'day-taken' : ''}}">
+            <text>{{cell.taken ? '✓' : ''}}</text>
           </view>
         </view>
       </view>

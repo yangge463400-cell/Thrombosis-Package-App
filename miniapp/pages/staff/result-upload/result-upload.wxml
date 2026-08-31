@@ -16,6 +16,9 @@
         <text class="ru-order-name">{{orderInfo.packageName}}</text>
         <text class="ru-order-no">订单号 {{orderInfo.orderNo}}</text>
         <text class="ru-order-phone">用户 {{orderInfo.userPhone}}</text>
+        <text class="ru-order-status {{orderInfo.status === 'paid' ? 'st-warn' : 'st-ok'}}">
+          {{orderInfo.status === 'paid' ? '尚未核销：请先通过「扫码核销」完成核销' : '已核销 · 检测中，可出具结果'}}
+        </text>
       </view>
     </block>
   </view>

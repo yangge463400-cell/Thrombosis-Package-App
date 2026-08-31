@@ -87,7 +87,7 @@ Page(guard.needUser({
               await orderApi.mockPay(data.orderId);
               wx.showToast({ title: '支付成功', icon: 'success' });
               setTimeout(() => {
-                wx.redirectTo({ url: `/pages/order-detail/order-detail?id=${data.orderId}&payed=1` });
+                wx.redirectTo({ url: `/pages/order-detail/order-detail?id=${data.orderId}&pay=1` });
               }, 800);
             } else {
               wx.showToast({ title: '订单已保留，可稍后支付', icon: 'none' });

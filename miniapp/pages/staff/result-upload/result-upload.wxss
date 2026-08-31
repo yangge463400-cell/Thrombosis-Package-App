@@ -35,3 +35,7 @@
   color: #999999;
 }
 .ru-submit { margin: 24rpx 32rpx 0; width: calc(100% - 64rpx); }
+
+.ru-order-status { display: block; font-size: 28rpx; margin-top: 12rpx; }
+.st-warn { color: #D46B08; }
+.st-ok { color: #237804; }

@@ -46,14 +46,14 @@ Page({
   _handleWechatResult(data) {
     if (data.isRegistered) {
       auth.setLogin(data.token, data.user.role, data.user);
-      this.setData({ loading: false });
+      // 页面即将销毁，无需 setData 恢复 loading，直接跳转（避免渲染层首帧数据不一致告警）
       if (data.user.role === 'staff') {
         wx.reLaunch({ url: '/pages/staff/workbench/workbench' });
       } else {
         wx.switchTab({ url: '/pages/index/index' });
       }
     } else {
-      // 未注册 → 注册页
+      // 未注册 → 注册页：navigateTo 压栈后本页仍存活，需复位 loading，否则返回后按钮一直转圈
       this.setData({ loading: false });
       wx.navigateTo({
         url: `/pages/register/register?ticket=${data.registerTicket}`
@@ -72,7 +72,7 @@ Page({
     try {
       const data = await staffApi.staffLogin(staffPhone, staffPassword);
       auth.setLogin(data.token, 'staff', { id: data.staffId, nickname: data.staffName, hospitalId: data.hospitalId });
-      this.setData({ loading: false });
+      // 页面即将销毁，无需 setData 恢复 loading，直接跳转
       wx.reLaunch({ url: '/pages/staff/workbench/workbench' });
     } catch (err) {
       this.setData({ loading: false });

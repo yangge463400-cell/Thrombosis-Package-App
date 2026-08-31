@@ -1,4 +1,4 @@
 <view class="cd">
-  <text wx:if="{{counting}}" class="cd-text">{{seconds}}s 后重新获取</text>
+  <text wx:if="{{counting}}" class="cd-text">{{remain}}s 后重新获取</text>
   <text wx:else class="cd-text cd-active" bindtap="onStart">{{text}}</text>
 </view>

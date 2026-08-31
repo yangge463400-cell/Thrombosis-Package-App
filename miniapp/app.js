@@ -24,7 +24,10 @@ App({
       wx.reLaunch({ url: '/pages/login/login' });
     } else if (role === 'staff') {
       wx.reLaunch({ url: '/pages/staff/workbench/workbench' });
+    } else {
+      // 已登录普通用户：入口页即登录页，冷启动应直达首页而非停留在登录页；
+      // 若 token 实际已过期，首个请求 401 后由 request 层统一弹回登录页
+      wx.switchTab({ url: '/pages/index/index' });
     }
-    // role=user 或未知：停留在入口页（tabBar 首页），不强制跳转
   }
 });

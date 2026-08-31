@@ -6,21 +6,25 @@ Page(guard.needUser({
   data: {
     id: null,
     medication: null,
-    timePoints: [],
     timeText: '',
     weekDates: [],
-    takenMap: {}
+    calendar: []
   },
 
   async onLoad(options) {
     this.setData({ id: options.id });
-    // 近 7 日日期
-    const dates = [];
+    // 近 7 日日期（labels 供表头展示，fulls 含年份用于匹配打卡记录，避免跨年错位）
+    const labels = [];
+    const fulls = [];
     for (let i = 6; i >= 0; i--) {
       const d = new Date(Date.now() - i * 86400000);
-      dates.push(`${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`);
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      labels.push(`${mm}-${dd}`);
+      fulls.push(`${d.getFullYear()}-${mm}-${dd}`);
     }
-    this.setData({ weekDates: dates });
+    this._weekFulls = fulls;
+    this.setData({ weekDates: labels });
     await this._load();
   },
 
@@ -29,23 +33,25 @@ Page(guard.needUser({
       const data = await medApi.getMedicationDetail(this.data.id);
       const m = data.medication;
       const timePoints = m.timePoints || [];
-      const takenMap = {};
-      (data.recentRecords || []).forEach(r => {
-        const key = `${r.timePointId}_${r.recordDate}`;
-        takenMap[key] = r.status === 'taken';
-      });
+      const takenSet = new Set((data.recentRecords || [])
+        .filter(r => r.status === 'taken')
+        .map(r => `${r.timePointId}_${r.recordDate}`));
+      // 日历模型在 JS 层预计算，模板零逻辑直接渲染
+      const fulls = this._weekFulls || [];
+      const calendar = timePoints.map(tp => ({
+        id: tp.id,
+        time: tp.time,
+        cells: fulls.map((full, i) => ({
+          date: full,
+          taken: takenSet.has(`${tp.id}_${full}`)
+        }))
+      }));
       this.setData({
         medication: m,
-        timePoints,
         timeText: timePoints.map(t => t.time).join('、'),
-        takenMap
+        calendar
       });
     } catch (e) { /* toast */ }
-  },
-
-  isTaken(timePointId, date) {
-    const fullDate = `${new Date().getFullYear()}-${date}`;
-    return !!this.data.takenMap[`${timePointId}_${fullDate}`];
   },
 
   onEdit() {

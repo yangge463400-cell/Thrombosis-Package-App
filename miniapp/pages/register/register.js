@@ -34,7 +34,7 @@ Page({
       await authApi.sendCode(phone);
       wx.showToast({ title: '验证码已发送（开发环境固定 123456）', icon: 'none', duration: 2500 });
       const cd = this.selectComponent('#cd');
-      if (cd) cd._begin();
+      if (cd) cd.begin(); // 发送成功才启动倒计时
     } catch (e) { /* toast 已由 request 处理 */ }
   },
 
@@ -64,7 +64,7 @@ Page({
       });
       if (loginData.isRegistered) {
         auth.setLogin(loginData.token, loginData.user.role, loginData.user);
-        this.setData({ loading: false });
+        // 页面即将销毁，无需 setData 恢复 loading，直接跳转
         wx.switchTab({ url: '/pages/index/index' });
       } else {
         this.setData({ loading: false });
