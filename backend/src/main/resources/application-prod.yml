@@ -19,6 +19,14 @@ thrombosis:
     notify-url: ${WX_NOTIFY_URL:}
   cors:
     allowed-origins: ${CORS_ORIGINS:https://jiangsuhongqing.com}
+  sms:
+    # 腾讯云短信：五项全部配置后自动启用真实验证码下发（未配齐则注册接口 fail-closed）
+    # SecretId/SecretKey：访问管理 CAM → API 密钥；SDKAppID/签名/模板：短信控制台
+    secret-id: ${SMS_SECRET_ID:}
+    secret-key: ${SMS_SECRET_KEY:}
+    sdk-app-id: ${SMS_SDK_APP_ID:}
+    sign-name: ${SMS_SIGN_NAME:}
+    template-id: ${SMS_TEMPLATE_ID:}
   dev:
     mock:
       # 生产必须 false：未配置微信凭据时登录直接拒绝（fail-closed），

@@ -47,6 +47,7 @@ public class AuthService {
 
     private final UserMapper userMapper;
     private final JwtUtil jwtUtil;
+    private final SmsService smsService;
 
     @Value("${thrombosis.wechat.appid:}")
     private String wxAppId;
@@ -63,7 +64,11 @@ public class AuthService {
     /** 手机号 -> 验证码（5 分钟 TTL） */
     private record StoredCode(String code, long createdAt) {}
     private static final long CODE_TTL_MILLIS = 5 * 60 * 1000L;
+    private static final long SEND_INTERVAL_MILLIS = 60 * 1000L;
     private final Map<String, StoredCode> codeStore = new ConcurrentHashMap<>();
+    /** 手机号 -> 上次发送时间（防短信轰炸：同一号码 60 秒内仅发一条） */
+    private final Map<String, Long> lastSendAt = new ConcurrentHashMap<>();
+    private final java.security.SecureRandom codeRandom = new java.security.SecureRandom();
     /** registerTicket -> openid */
     private final Map<String, String> ticketStore = new ConcurrentHashMap<>();
 
@@ -106,14 +111,33 @@ public class AuthService {
     }
 
     public void sendCode(String phone) {
-        // 生产 fail-closed：短信服务商未接入前拒绝下发，避免固定验证码在真实环境被任意注册
-        if (!devMockEnabled) {
-            // TODO(prod): 接入短信服务商（如腾讯云 SMS，签名/模板审批通过后替换此分支）
+        // 防短信轰炸：同一号码 60 秒内仅允许发送一条
+        Long last = lastSendAt.get(phone);
+        if (last != null && System.currentTimeMillis() - last < SEND_INTERVAL_MILLIS) {
+            throw new BusinessException(ErrorCode.SERVER_ERROR, "发送过于频繁，请稍后再试");
+        }
+
+        String code;
+        if (smsService.configured()) {
+            // 生产：随机验证码走真实短信通道（腾讯云 SMS），失败直接暴露原因
+            code = String.format("%06d", codeRandom.nextInt(1_000_000));
+            try {
+                smsService.sendVerifyCode(phone, code, 5);
+            } catch (IllegalStateException e) {
+                throw new BusinessException(ErrorCode.SERVER_ERROR, e.getMessage());
+            }
+        } else if (devMockEnabled) {
+            // 开发：固定验证码，仅限 dev mock 显式开启时
+            code = mockVerifyCode;
+            log.info("[mock] 短信验证码 phone={} code={}", phone, mockVerifyCode);
+        } else {
+            // fail-closed：短信服务商未接入前拒绝下发，避免固定验证码被任意注册
             log.warn("[prod] 短信服务未接入，拒绝下发验证码 phone={}", phone);
             throw new BusinessException(ErrorCode.SERVER_ERROR, "短信服务未接入，请联系管理员");
         }
-        codeStore.put(phone, new StoredCode(mockVerifyCode, System.currentTimeMillis()));
-        log.info("[mock] 短信验证码 phone={} code={}", phone, mockVerifyCode);
+
+        codeStore.put(phone, new StoredCode(code, System.currentTimeMillis()));
+        lastSendAt.put(phone, System.currentTimeMillis());
     }
 
     public UserVO register(String ticket, String phone, String code, String nickname, String avatar) {
