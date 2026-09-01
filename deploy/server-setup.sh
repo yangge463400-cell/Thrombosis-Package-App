@@ -149,8 +149,7 @@ server {
     return 301 https://\$host\$request_uri;
 }
 server {
-    listen 443 ssl;
-    http2 on;
+    listen 443 ssl http2;
     server_name ${DOMAIN} www.${DOMAIN};
     ssl_certificate     ${CERT};
     ssl_certificate_key ${KEY};

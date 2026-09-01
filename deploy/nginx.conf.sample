@@ -13,8 +13,7 @@ server {
 }
 
 server {
-    listen 443 ssl;
-    http2 on;
+    listen 443 ssl http2;
     server_name jiangsuhongqing.com www.jiangsuhongqing.com;
 
     ssl_certificate     /etc/nginx/certs/jiangsuhongqing.com.pem;
