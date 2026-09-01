@@ -18,7 +18,7 @@ thrombosis:
     mch-id: ${WX_MCH_ID:}
     notify-url: ${WX_NOTIFY_URL:}
   cors:
-    allowed-origins: ${CORS_ORIGINS:https://localhost}
+    allowed-origins: ${CORS_ORIGINS:https://jiangsuhongqing.com}
   dev:
     mock:
       # 生产必须 false：未配置微信凭据时登录直接拒绝（fail-closed），
