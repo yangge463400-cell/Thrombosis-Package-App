@@ -66,19 +66,20 @@ grep -qs "^bind-address" /etc/my.cnf 2>/dev/null || \
 systemctl restart mysql 2>/dev/null || systemctl restart mysqld 2>/dev/null || true
 sleep 2
 
-# 建表 + 基础数据
+# 建表 + 基础数据 + 演示数据清理（仅首次执行；重复跑脚本不会重置数据库）
 M="mysql -u${DB_USER} -p${DB_PASS} -h127.0.0.1 ${DB_NAME}"
-$M < "$APP_DIR/db/schema.sql"
-$M < "$APP_DIR/db/seed.sql"
-# 生产：清理演示业务数据（仅首次执行；账号由后端首启自动创建）
-if [ ! -f "$APP_DIR/.db-cleaned" ]; then
+if [ ! -f "$APP_DIR/.db-initialized" ]; then
+  $M < "$APP_DIR/db/schema.sql"
+  $M < "$APP_DIR/db/seed.sql"
   $M <<'SQL'
 DELETE FROM pay_bill; DELETE FROM test_result; DELETE FROM verify_record;
 DELETE FROM medication_record; DELETE FROM medication;
 DELETE FROM message; DELETE FROM orders; DELETE FROM user;
 SQL
-  touch "$APP_DIR/.db-cleaned"
-  echo ">> 演示业务数据已清理"
+  touch "$APP_DIR/.db-initialized"
+  echo ">> 数据库初始化完成，演示业务数据已清理"
+else
+  echo ">> 数据库已初始化过，跳过（避免重置数据）"
 fi
 
 echo "== [3/6] 后端环境变量与 systemd 托管 =="
