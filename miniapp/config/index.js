@@ -3,8 +3,8 @@
  * 说明：后端就绪后仅需修改 BASE_URL；订阅模板 ID 由后端/C 平台提供后替换
  */
 module.exports = {
-  // 后端服务地址（本地 Spring Boot；微信开发者工具需勾选「不校验合法域名」）
-  BASE_URL: 'http://localhost:8080',
+  // 后端服务地址（生产 HTTPS + 备案域名；微信后台需配置 request 合法域名）
+  BASE_URL: 'https://jiangsuhongqing.com',
 
   // 开发态能力开关：微信原生能力在无真实凭据时的降级行为
   // requestPaymentMock: true 时「立即支付」走后端模拟支付回调接口
