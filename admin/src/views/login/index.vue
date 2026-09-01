@@ -34,7 +34,7 @@
         </el-form>
 
         <div class="login-tip">
-          测试账号：平台 admin / admin123 ｜ 医院 hospital_admin / admin123
+          如需账号请联系平台管理员 · 苏ICP备2026060073号-1
         </div>
       </div>
     </div>
